@@ -3,8 +3,8 @@
 @section('title', $submission->title)
 
 @section('content')
-    <a href="{{ route('voting.gallery', $event->slug) }}"
-        class="text-sm text-blue-600 hover:underline mb-4 inline-block">← Kembali ke Gallery</a>
+    <a href="{{ route('voting.gallery', $event->slug) }}" class="text-sm text-blue-600 hover:underline mb-4 inline-block">←
+        Kembali ke Gallery</a>
 
     @php
         $thumbnailUrl = $submission->thumbnail_path
@@ -24,16 +24,15 @@
         </div>
 
         <div class="mb-6">
-            <img src="{{ $thumbnailUrl }}"
-                alt="{{ $submission->title }}"
+            <img src="{{ $thumbnailUrl }}" alt="{{ $submission->title }}"
                 class="w-full max-h-125 object-contain rounded-lg bg-gray-100">
         </div>
 
-        @if($submission->screenshots->count())
+        @if ($submission->screenshots->count())
             <div class="mb-6">
                 <h2 class="font-semibold text-sm text-gray-500 mb-2">Screenshot</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    @foreach($submission->screenshots as $ss)
+                    @foreach ($submission->screenshots as $ss)
                         @php
                             $imageUrl = $ss->image_path
                                 ? (\Illuminate\Support\Str::startsWith($ss->image_path, 'images/')
@@ -44,8 +43,7 @@
 
                         <a href="{{ $imageUrl }}" target="_blank" rel="noopener noreferrer">
                             <img src="{{ $imageUrl }}"
-                                class="w-full h-40 object-cover rounded hover:opacity-90 transition"
-                                loading="lazy"
+                                class="w-full h-40 object-cover rounded hover:opacity-90 transition" loading="lazy"
                                 alt="Screenshot karya {{ $submission->title }}">
                         </a>
                     @endforeach
@@ -60,20 +58,22 @@
             </div>
         </div>
 
-        @if($submission->demo_url)
+        @if ($submission->demo_url)
             <div class="mb-6">
                 <h2 class="font-semibold text-sm text-gray-500 mb-2">Demo</h2>
                 <a href="{{ $submission->demo_url }}" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center gap-2 bg-white rounded-lg px-4 py-3 shadow-sm text-blue-600 hover:text-blue-800 transition break-all">
                     {{ $submission->demo_url }}
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                 </a>
             </div>
         @endif
 
-        @if($event->isClosed() && $voteCount !== null)
+        @if ($event->isClosed() && $voteCount !== null)
             <div class="mb-6 bg-white rounded-lg p-4 shadow-sm text-center">
                 <p class="text-3xl font-bold text-blue-600">{{ $voteCount }}</p>
                 <p class="text-sm text-gray-500">total vote</p>
@@ -81,9 +81,9 @@
         @endif
 
         <div class="bg-white rounded-lg p-4 shadow-sm">
-            @if($event->isVotingOpen())
+            @if ($event->isVotingOpen())
                 @auth
-                    @if(isset($userVotes[$submission->concentration]) && (int) $userVotes[$submission->concentration] === $submission->id)
+                    @if (isset($userVotes[$submission->concentration]) && (int) $userVotes[$submission->concentration] === $submission->id)
                         <div class="bg-green-50 text-green-700 px-6 py-3 rounded text-center font-medium">
                             Kamu sudah vote karya ini ✓
                         </div>
@@ -92,7 +92,43 @@
                             Kamu sudah vote di konsentrasi {{ $submission->concentration }}
                         </div>
                     @else
-                        <p class="text-center text-gray-400 py-3">[Vote button — aktif di Fase 4]</p>
+                        <div x-data="{ confirming: false }">
+                            <button @click="confirming = true"
+                                class="w-full bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition font-medium">
+                                Vote Karya Ini
+                            </button>
+
+                            <div x-show="confirming" x-cloak
+                                class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+                                x-transition.opacity>
+                                <div class="bg-white rounded-lg p-6 max-w-sm w-full" @click.away="confirming = false">
+                                    <h3 class="font-bold text-lg mb-2">Konfirmasi Vote</h3>
+                                    <p class="text-gray-600 mb-1">
+                                        Vote untuk <strong>{{ $submission->title }}</strong>?
+                                    </p>
+                                    <p class="text-sm text-red-500 mb-4">
+                                        Vote tidak bisa diubah setelah dikonfirmasi.
+                                    </p>
+
+                                    <div class="flex gap-3">
+                                        <button @click="confirming = false"
+                                            class="flex-1 px-4 py-2 border rounded hover:bg-gray-50 transition">
+                                            Batal
+                                        </button>
+
+                                        <form method="POST"
+                                            action="{{ route('voting.vote', [$event->slug, $submission->id]) }}"
+                                            class="flex-1">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                Ya, Vote!
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endif
                 @else
                     <a href="{{ route('voting.login') }}"
