@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->enum('status', ['draft', 'submission_open', 'voting_open', 'closed'])->default('draft');
+            $table->enum('status', ['draft', 'submission_open', 'voting_open', 'closed', 'archived'])->default('draft');
             $table->timestamp('submission_deadline')->nullable();
             $table->timestamps();
         });
