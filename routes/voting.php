@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Voting\Auth\LoginController;
 use App\Http\Controllers\Voting\GalleryController;
+use App\Http\Controllers\Voting\VoteController;
 use App\Http\Controllers\Voting\SubmitKaryaController;
 use App\Http\Controllers\Voting\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Voting\Admin\SubmissionController as AdminSubmissionController;
@@ -21,13 +22,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/submit/{event}/status', [SubmitKaryaController::class, 'status'])->name('voting.submit.status');
 });
 
-// Temporary Auth Routes (Fase 1 workaround)
+// Auth Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('voting.login');
     Route::post('/login', [LoginController::class, 'login'])->name('voting.login.post');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('voting.logout')->middleware('auth');
+
+// Vote Routes
+Route::middleware('auth')->group(function () {
+    Route::post('/event/{slug}/vote/{submission}', [VoteController::class, 'store'])
+        ->middleware('throttle:30,1')
+        ->name('voting.vote');
+
+    Route::get('/event/{slug}/my-votes', [VoteController::class, 'myVotes'])
+        ->name('voting.my-votes');
+});
 
 // Admin Routes
 Route::prefix('admin')->middleware(['auth', 'voting.admin'])->group(function () {
