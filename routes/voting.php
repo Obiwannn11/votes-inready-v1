@@ -2,15 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Voting\Auth\LoginController;
+use App\Http\Controllers\Voting\GalleryController;
 use App\Http\Controllers\Voting\SubmitKaryaController;
 use App\Http\Controllers\Voting\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Voting\Admin\SubmissionController as AdminSubmissionController;
 use App\Http\Controllers\Voting\Admin\MemberController as AdminMemberController;
 
 // Voting Public Routes
-Route::get('/', function () {
-    return \Illuminate\Support\Facades\View::make('voting.landing');
-})->name('voting.landing');
+Route::get('/', [GalleryController::class, 'landing'])->name('voting.landing');
+
+Route::get('/event/{slug}', [GalleryController::class, 'index'])->name('voting.gallery');
+Route::get('/event/{slug}/karya/{id}', [GalleryController::class, 'show'])->name('voting.detail');
 
 // Member Routes for Submission (Scenario A: Auth required)
 Route::middleware('auth')->group(function () {
