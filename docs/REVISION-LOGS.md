@@ -27,6 +27,24 @@ Gunakan template di bawah ini setiap kali mencatat revisi baru. Tambahkan entri 
 
 ## 📜 Daftar Revisi
 
+### v1.0.8 - 14 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Fase 4 (Voting Mechanism)
+
+**Detail Perubahan:**
+- [Added] Menambahkan `VoteController` khusus voting di `app/Http/Controllers/Voting/VoteController.php` dengan guard event status, guard submission approved+event match, guard user aktif, batas 1 vote per konsentrasi, dan batas total 3 vote per event.
+- [Added] Menambahkan endpoint voting di `routes/voting.php`: `POST /vote/event/{slug}/vote/{submission}` (`voting.vote`, throttle `30/menit`) dan `GET /vote/event/{slug}/my-votes` (`voting.my-votes`).
+- [Added] Menambahkan halaman `resources/views/voting/vote/my-votes.blade.php` untuk menampilkan daftar vote user per event beserta counter `x/3`.
+- [Changed] Mengaktifkan tombol vote + modal konfirmasi di `resources/views/voting/gallery/show.blade.php` (menggantikan placeholder Fase 3).
+- [Changed] Mengupdate navbar `resources/views/voting/layouts/app.blade.php` dengan link `Vote Saya` saat berada di route event (berparameter `slug`) dan menambahkan dukungan `x-cloak`.
+- [Changed] Mengupdate `app/Http/Controllers/Voting/Auth/LoginController.php`: menolak login `is_active = false`, menjaga default admin ke admin panel, serta redirect `intended` untuk flow setelah login.
+- [Changed] Memperketat constraint votes di `database/migrations/2026_03_13_135554_create_votes_table.php`: `concentration` wajib isi (non-null) dan tambahan unique key `voting_event_id + voter_id + submission_id`.
+- [Added] Menambahkan test Fase 4 di `tests/Feature/Voting/VoteMechanismTest.php` meliputi auth guard, inactive login guard, happy path voting, constraint konsentrasi, batas total 3 vote, guard 404, my-votes visibility, dan verifikasi middleware throttle.
+
+**Dampak/Catatan Khusus:**
+- Karena ada perubahan migration votes, jalankan ulang database dengan `php artisan migrate:fresh --seed` pada environment development.
+- Validasi test berjalan hijau: `php artisan test tests/Feature/Voting/VoteMechanismTest.php tests/Feature/Voting/SubmitKaryaTest.php` (19 passed).
+
 ### v1.0.7 - 14 Maret 2026
 **Author:** AI Assistant
 **Fase Terkait:** Fase 3 (Gallery & Detail Karya)
