@@ -8,6 +8,11 @@
     <title>@yield('title', 'Inready VOTES')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
     @stack('styles')
 </head>
 
@@ -19,6 +24,17 @@
             </a>
             <div>
                 @auth
+                    @php
+                        $currentSlug = \Illuminate\Support\Facades\Request::route('slug');
+                    @endphp
+
+                    @if ($currentSlug)
+                        <a href="{{ route('voting.my-votes', $currentSlug) }}"
+                            class="text-sm text-blue-600 hover:underline mr-3">
+                            Vote Saya
+                        </a>
+                    @endif
+
                     <span class="text-sm text-gray-600 mr-3">{{ \Illuminate\Support\Facades\Auth::user()->name }}</span>
                     <form method="POST" action="{{ route('voting.logout') }}" class="inline">
                         @csrf
