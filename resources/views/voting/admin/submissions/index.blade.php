@@ -22,8 +22,12 @@
     @forelse($submissions as $sub)
         <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-3 flex gap-4">
             @if ($sub->thumbnail_path)
-                <img src="{{ \Illuminate\Support\Facades\Storage::url($sub->thumbnail_path) }}"
-                    class="w-20 h-20 object-cover rounded bg-gray-100" alt="">
+                @php
+                    $thumbnailUrl = \Illuminate\Support\Str::startsWith($sub->thumbnail_path, 'images/')
+                        ? asset($sub->thumbnail_path)
+                        : \Illuminate\Support\Facades\Storage::url($sub->thumbnail_path);
+                @endphp
+                <img src="{{ $thumbnailUrl }}" class="w-20 h-20 object-cover rounded bg-gray-100" alt="">
             @else
                 <div
                     class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs text-center">

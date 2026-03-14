@@ -18,8 +18,12 @@
         </div>
 
         @if ($submission->thumbnail_path)
-            <img src="{{ \Illuminate\Support\Facades\Storage::url($submission->thumbnail_path) }}"
-                class="w-full h-64 object-cover rounded mb-6 bg-gray-100">
+            @php
+                $thumbnailUrl = \Illuminate\Support\Str::startsWith($submission->thumbnail_path, 'images/')
+                    ? asset($submission->thumbnail_path)
+                    : \Illuminate\Support\Facades\Storage::url($submission->thumbnail_path);
+            @endphp
+            <img src="{{ $thumbnailUrl }}" class="w-full h-64 object-cover rounded mb-6 bg-gray-100">
         @endif
 
         <div class="mb-6">
@@ -50,8 +54,12 @@
                 <h3 class="font-bold text-lg mb-3">Screenshots</h3>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                     @foreach ($submission->screenshots as $ss)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::url($ss->image_path) }}"
-                            class="w-full h-32 object-cover rounded bg-gray-100">
+                        @php
+                            $screenshotUrl = \Illuminate\Support\Str::startsWith($ss->image_path, 'images/')
+                                ? asset($ss->image_path)
+                                : \Illuminate\Support\Facades\Storage::url($ss->image_path);
+                        @endphp
+                        <img src="{{ $screenshotUrl }}" class="w-full h-32 object-cover rounded bg-gray-100">
                     @endforeach
                 </div>
             </div>
