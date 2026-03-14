@@ -66,7 +66,7 @@ class EventController extends Controller
     public function changeStatus(Request $request, VotingEvent $event)
     {
         $data = $request->validate([
-            'status' => 'required|in:draft,submission_open,voting_open,closed',
+            'status' => 'required|in:draft,submission_open,voting_open,closed,archived',
         ]);
 
         // Logic check validasi status transition bisa ditambahkan di sini.
