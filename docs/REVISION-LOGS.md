@@ -27,6 +27,37 @@ Gunakan template di bawah ini setiap kali mencatat revisi baru. Tambahkan entri 
 
 ## 📜 Daftar Revisi
 
+### v1.0.7 - 14 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Fase 3 (Gallery & Detail Karya)
+
+**Detail Perubahan:**
+- [Added] Menambahkan `GalleryController` untuk alur landing event, gallery per event, dan detail karya publik di `app/Http/Controllers/Voting/GalleryController.php`.
+- [Added] Menambahkan route publik Fase 3 di `routes/voting.php`: `/vote/`, `/vote/event/{slug}`, dan `/vote/event/{slug}/karya/{id}`.
+- [Added] Menambahkan view `resources/views/voting/gallery/index.blade.php` dan `resources/views/voting/gallery/show.blade.php` dengan fitur filter konsentrasi, badge status voting, indikator vote user login, serta placeholder tombol vote untuk persiapan Fase 4.
+- [Changed] Mengubah `resources/views/voting/landing.blade.php` agar menampilkan daftar event status `voting_open/closed` dan redirect otomatis ke gallery jika hanya ada satu event yang tampil.
+- [Changed] Menyesuaikan kontrak model: penggunaan relasi `submitter` untuk nama peserta, penggunaan field screenshot `image_path`, dan penambahan helper status pada `app/Models/VotingEvent.php` (`approvedSubmissions`, `isVotingOpen`, `isClosed`, `isPublishedForGallery`).
+- [Changed] Memperluas enum status event dengan `archived` pada migration `database/migrations/2026_03_13_135551_create_voting_events_table.php` serta validasi status admin di `app/Http/Controllers/Voting/Admin/EventController.php`.
+- [Changed] Merevisi `database/seeders/VotingSeeder.php` agar seed data thumbnail/screenshot langsung mengarah ke `public/images/placeholder-ss.png` melalui path `images/placeholder-ss.png` untuk kebutuhan development `migrate:fresh --seed`.
+- [Changed] Menyesuaikan view admin submission agar kompatibel dengan path gambar publik (`images/...`) maupun path storage (`storage/...`) di `resources/views/voting/admin/submissions/index.blade.php` dan `resources/views/voting/admin/submissions/show.blade.php`.
+
+**Dampak/Catatan Khusus:**
+- Setelah update migration enum, jalankan ulang database dengan `php artisan migrate:fresh --seed`.
+- Checklist Fase 3 kini siap divalidasi end-to-end sebelum lanjut ke Fase 4 (Voting Mechanism).
+
+### v1.0.6 - 14 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Fase 2 (Submit Karya)
+
+**Detail Perubahan:**
+- [Added] Menambahkan Feature Test end-to-end untuk alur Submit Karya berbasis auth member di `tests/Feature/Voting/SubmitKaryaTest.php`.
+- [Added] Skenario test meliputi: guard guest redirect login, akses form hanya saat submission open, larangan submit untuk admin, validasi thumbnail wajib, simpan submission + screenshot, dan isolasi data status per member.
+- [Fixed] Menyinkronkan environment test melalui `composer install` agar plugin/dependency Pest konsisten sebelum menjalankan suite test.
+
+**Dampak/Catatan Khusus:**
+- Jalankan test fokus fase ini dengan command: `php artisan test tests/Feature/Voting/SubmitKaryaTest.php`.
+- Status terakhir: 8 test passed.
+
 ### v1.0.5 - 14 Maret 2026
 **Author:** AI Assistant
 **Fase Terkait:** Fase 2 (Refactor Migration & Seeder)
