@@ -16,10 +16,11 @@ return new class extends Migration
             $table->foreignId('voting_event_id')->constrained()->cascadeOnDelete();
             $table->foreignId('voter_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('submission_id')->constrained()->cascadeOnDelete();
-            $table->string('concentration')->nullable();
+            $table->string('concentration');
             $table->timestamps();
 
             $table->unique(['voting_event_id', 'voter_id', 'concentration'], 'unique_vote_per_concentration');
+            $table->unique(['voting_event_id', 'voter_id', 'submission_id'], 'unique_vote_per_submission');
         });
     }
 
