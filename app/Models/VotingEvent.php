@@ -47,6 +47,11 @@ class VotingEvent extends Model
         return $this->hasMany(Vote::class);
     }
 
+    public function approvedSubmissions()
+    {
+        return $this->submissions()->where('status', 'approved');
+    }
+
     public function isSubmissionOpen(): bool
     {
         if ($this->status !== 'submission_open') {
@@ -58,5 +63,20 @@ class VotingEvent extends Model
         }
 
         return true;
+    }
+
+    public function isVotingOpen(): bool
+    {
+        return $this->status === 'voting_open';
+    }
+
+    public function isClosed(): bool
+    {
+        return in_array($this->status, ['closed', 'archived'], true);
+    }
+
+    public function isPublishedForGallery(): bool
+    {
+        return in_array($this->status, ['submission_open', 'voting_open', 'closed', 'archived'], true);
     }
 }
