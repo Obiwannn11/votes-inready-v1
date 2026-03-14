@@ -13,6 +13,14 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
+        if (Auth::check()) {
+            if (Auth::user()->role === 'admin') {
+                return Redirect::route('voting.admin.events.index');
+            }
+
+            return Redirect::route('voting.landing');
+        }
+
         return View::make('voting.auth.login');
     }
 
@@ -21,16 +29,28 @@ class LoginController extends Controller
         $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+            $user = Auth::user();
 
-            if (Auth::user()->role === 'admin') {
-                return Redirect::route('voting.admin.events.index');
+            if (!$user->is_active) {
+                Auth::logout();
+
+                return Redirect::back()
+                    ->withInput($request->only('email'))
+                    ->with('error', 'Akun tidak aktif. Hubungi admin.');
             }
 
-            return Redirect::route('voting.landing');
+            $request->session()->regenerate();
+
+            if ($user->role === 'admin') {
+                return Redirect::intended(route('voting.admin.events.index'));
+            }
+
+            return Redirect::intended(route('voting.landing'));
         }
 
-        return Redirect::back()->with('error', 'Email atau password salah.');
+        return Redirect::back()
+            ->withInput($request->only('email'))
+            ->with('error', 'Email atau password salah.');
     }
 
     public function logout(Request $request)
@@ -39,6 +59,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::route('voting.login');
+        return Redirect::route('voting.landing');
     }
 }
