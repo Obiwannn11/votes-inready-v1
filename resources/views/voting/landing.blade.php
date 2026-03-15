@@ -4,11 +4,6 @@
 
 @section('content')
     <div class="text-center py-12 relative">
-        <div class="absolute top-0 right-[20%] w-24 h-24 bg-primary-red border-4 border-ink rounded-full -z-10 opacity-80">
-        </div>
-        <div class="absolute bottom-0 left-[20%] w-24 h-24 bg-primary-blue border-4 border-ink rotate-12 -z-10 opacity-80">
-        </div>
-
         <h1 class="text-4xl sm:text-5xl font-display font-black uppercase tracking-tight text-ink mb-2">Inready VOTES</h1>
         <p class="font-body text-grey font-medium tracking-wide uppercase text-sm sm:text-base mb-12">Voting On Talent
             Excellence & Showcase</p>

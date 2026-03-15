@@ -42,10 +42,12 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             if ($user->role === 'admin') {
-                return Redirect::intended(route('voting.admin.events.index'));
+                return Redirect::intended(route('voting.admin.events.index'))
+                    ->with('success', 'Berhasil login sebagai ' . $user->name);  
             }
 
-            return Redirect::intended(route('voting.landing'));
+            return Redirect::intended(route('voting.landing'))
+                ->with('success', 'Berhasil login sebagai ' . $user->name);
         }
 
         return Redirect::back()

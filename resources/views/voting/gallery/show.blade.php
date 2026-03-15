@@ -3,10 +3,9 @@
 @section('title', $submission->title)
 
 @section('content')
-    <a href="{{ route('voting.gallery', $event->slug) }}"
-        class="font-display font-bold uppercase tracking-widest text-sm text-ink hover:text-primary-blue hover:-translate-x-1 transition-all inline-block mb-6">
+    <x-button variant="ghost" size="sm" href="{{ route('voting.gallery', $event->slug) }}" class="mb-6">
         ← Kembali ke Gallery
-    </a>
+    </x-button>
 
     @php
         $thumbnailUrl = $submission->thumbnail_path
@@ -28,7 +27,6 @@
         </div>
 
         <div class="mb-10 w-full border-4 border-ink shadow-[8px_8px_0px_0px_var(--color-ink)] bg-surface relative">
-            <div class="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-primary-yellow border-2 border-ink z-10"></div>
             <img src="{{ $thumbnailUrl }}" alt="{{ $submission->title }}"
                 class="w-full max-h-[500px] object-cover bg-muted p-2">
         </div>
@@ -36,7 +34,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-8">
                 @if ($submission->screenshots->count())
-                    <section>
+                    <section x-data="{ previewOpen: false, previewSrc: '' }">
                         <h2
                             class="font-display font-black text-2xl uppercase tracking-widest border-b-4 border-ink pb-2 mb-4">
                             Screenshot</h2>
@@ -50,13 +48,30 @@
                                         : asset('images/placeholder-ss.png');
                                 @endphp
 
-                                <a href="{{ $imageUrl }}" target="_blank" rel="noopener noreferrer"
-                                    class="block border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] transition-transform hover:-translate-y-1 bg-surface p-1">
+                                <button type="button" @click="previewSrc = '{{ $imageUrl }}'; previewOpen = true"
+                                    class="block border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] transition-transform hover:-translate-y-1 bg-surface p-1 focus:outline-none cursor-zoom-in text-left">
                                     <img src="{{ $imageUrl }}"
                                         class="w-full h-48 object-cover grayscale-[30%] hover:grayscale-0 transition duration-300"
                                         loading="lazy" alt="Screenshot karya {{ $submission->title }}">
-                                </a>
+                                </button>
                             @endforeach
+                        </div>
+
+                        <!-- Fullscreen Image Preview Modal -->
+                        <div x-show="previewOpen" x-cloak
+                            class="fixed inset-0 bg-ink/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 cursor-zoom-out"
+                            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+                            x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                            @click="previewOpen = false" @keydown.escape.window="previewOpen = false">
+
+                            <button type="button"
+                                class="absolute top-6 right-6 w-12 h-12 bg-surface border-4 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] flex items-center justify-center font-display font-bold text-xl text-ink hover:bg-primary-red hover:text-surface transition-colors">
+                                X
+                            </button>
+                            <img :src="previewSrc"
+                                class="max-w-full max-h-[90vh] object-contain border-4 border-ink shadow-[8px_8px_0px_0px_var(--color-ink)] bg-surface p-2"
+                                @click.stop>
                         </div>
                     </section>
                 @endif
@@ -96,7 +111,7 @@
                 @endif
 
                 <div class="sticky top-6">
-                    <x-card border="thick" accent="circle">
+                    <x-card border="thick" accent="circle-success">
                         @if ($event->isVotingOpen())
                             @auth
                                 @if (isset($userVotes[$submission->concentration]) && (int) $userVotes[$submission->concentration] === $submission->id)

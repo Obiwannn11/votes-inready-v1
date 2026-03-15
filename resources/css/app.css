@@ -20,6 +20,10 @@
     --color-muted: #E8E8E4;
     --color-success: #16A34A;
 
+    --color-brand-black: #1A1A1A;
+    --color-brand-gold: #D4A843;
+    --color-brand-gold-light: #E8C96A;
+
     --font-display: 'Outfit', system-ui, sans-serif;
     --font-body: 'Poppins', system-ui, sans-serif;
     --font-sans: 'Poppins', system-ui, sans-serif;

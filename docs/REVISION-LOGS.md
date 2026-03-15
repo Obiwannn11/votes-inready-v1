@@ -27,6 +27,19 @@ Gunakan template di bawah ini setiap kali mencatat revisi baru. Tambahkan entri 
 
 ## 📜 Daftar Revisi
 
+### v2.1.0 - 16 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Front Door (Landing Page) & Navigation
+
+**Detail Perubahan:**
+- [Added] Menambahkan link navigasi "Event" di Navbar pada `resources/views/voting/layouts/app.blade.php`.
+- [Changed] Mengubah link logo "Inready VOTES" pada Navbar agar mengarah ke root landing page `/` alih-alih `voting.landing`.
+- [Changed] Memperbarui `routes/web.php` untuk mengambil *query* `$submissionEvents` yang masih *open* saat memuat route `/` dan memparsingnya ke compact view.
+- [Added] Mengimplementasikan desain ulang `resources/views/voting/home.blade.php` sebagai landing page statis (extend layout) dengan gaya Bauhaus yang dinamis, mencakup section kondisional "Submit Karya" ketika event submission dibuka beserta penempatan ilustrasi logo inready.
+
+**Dampak/Catatan Khusus:**
+- Navigasi navbar di update agar pengunjung pertama kali dapat masuk dari root ke gallery (Events).
+
 ### v2.0.0 - 15 Maret 2026
 **Author:** AI Assistant
 **Fase Terkait:** Polish & Design System Restructuring
