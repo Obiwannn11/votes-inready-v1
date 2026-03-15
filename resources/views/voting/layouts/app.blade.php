@@ -53,7 +53,8 @@
                     <a href="{{ route('voting.landing') }}"
                         class="font-body text-xs font-bold {{ request()->is('vote') || (request()->is('vote/event*') && !request()->is('vote/submit*')) ? 'underline underline-offset-4' : 'hover:underline hover:underline-offset-4' }}">Voting</a>
                     @auth
-                        <a href="{{ route('voting.submit.index') }}" class="font-body text-xs font-bold {{ request()->is('submit*') ? 'underline underline-offset-4' : 'hover:underline hover:underline-offset-4' }}">Sub</a>
+                        <a href="{{ route('voting.submit.index') }}"
+                            class="font-body text-xs font-bold {{ request()->is('submit*') ? 'underline underline-offset-4' : 'hover:underline hover:underline-offset-4' }}">Sub</a>
                     @endauth
                 </div>
                 @auth
