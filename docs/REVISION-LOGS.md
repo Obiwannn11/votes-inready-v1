@@ -27,6 +27,23 @@ Gunakan template di bawah ini setiap kali mencatat revisi baru. Tambahkan entri 
 
 ## 📜 Daftar Revisi
 
+### v2.2.0 - 16 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Fase 2 & Polish Design System
+
+**Detail Perubahan:**
+- [Fixed] Menghilangkan bug *double underline* pada layout Navbar saat kursor `hover` atau link `active` di `resources/views/voting/layouts/app.blade.php`.
+- [Changed] Menyembunyikan menu navigasi "Submission" secara keseluruhan bagi Guest (belum login) untuk mengikuti flow eksklusif auth (sebelumnya menampilkan logo gembok).
+- [Added] Menambahkan halaman Daftar Event Terbuka di route `/submit` untuk mewadahi semua event yang berstatus `submission_open` pada `resources/views/voting/submit/index.blade.php`.
+- [Added] Memperbarui Controller `SubmitKaryaController@index` untuk memfilter event submissions berdasarkan status aktif dengan route name `voting.submit.index`.
+- [Changed] Merombak tampilan Form Kumpul Karya (`resources/views/voting/submit/form.blade.php`) menggunakan token *InReady Bauhaus* (solid border, brutalist input, dan sharp shadow).
+- [Added] Menambahkan utilitas *Pop-up Confirmation* / *Modal Alert* sebelum mengirim final data form menggunakan layer `Alpine.js` agar peserta meninjau kembali kumpulannya selaras dengan konfirmasi "tidak bisa diubah" dari aturan kompetisi.
+- [Changed] Memperbarui `resources/views/voting/partials/error-page.blade.php` agar layout status error 404/403/500 selaras dengan *Design System v2.0* (kartu solid, elemen dekorasi SVG).
+- [Removed] Menghapus direct URL route submission dari yang semula spesifik ke parameter slug form langsung tanpa melalui halaman index pilihan.
+
+**Dampak/Catatan Khusus:**
+- View Submission sekarang dilalui dengan mengakses route baru `/submit` (daftar event), lalu diarahkan ke form `/submit/{event}` masing-masing.
+
 ### v2.1.0 - 16 Maret 2026
 **Author:** AI Assistant
 **Fase Terkait:** Front Door (Landing Page) & Navigation
