@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Auth;
 
 class SubmitKaryaController extends Controller
 {
+    public function index()
+    {
+        $events = VotingEvent::where('status', 'submission_open')->latest()->get();
+        return View::make('voting.submit.index', compact('events'));
+    }
+
     public function form(VotingEvent $event)
     {
         abort_unless($event->isSubmissionOpen(), 403, 'Submission belum dibuka atau sudah ditutup.');

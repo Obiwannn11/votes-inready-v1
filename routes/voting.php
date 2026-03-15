@@ -19,6 +19,7 @@ Route::get('/event/{slug}/hasil', [ResultController::class, 'index'])->name('vot
 
 // Member Routes for Submission (Scenario A: Auth required)
 Route::middleware('auth')->group(function () {
+    Route::get('/submit', [SubmitKaryaController::class, 'index'])->name('voting.submit.index');
     Route::get('/submit/{event}', [SubmitKaryaController::class, 'form'])->name('voting.submit.form');
     Route::post('/submit/{event}', [SubmitKaryaController::class, 'store'])->name('voting.submit.store');
     Route::get('/submit/{event}/status', [SubmitKaryaController::class, 'status'])->name('voting.submit.status');
