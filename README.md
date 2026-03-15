@@ -1,59 +1,162 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Inready VOTES
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem voting internal Inready Workgroup berbasis Laravel + Blade untuk alur:
 
-## About Laravel
+- manajemen event voting oleh admin,
+- submit karya oleh member,
+- kurasi karya oleh admin,
+- voting karya oleh member,
+- publikasi hasil voting per konsentrasi.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Seluruh modul voting berjalan di prefix route `/vote` dan dipisahkan dari route utama aplikasi.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Status Pengembangan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Fase 0: Foundation - selesai
+- Fase 1: Admin Panel - selesai
+- Fase 2: Submit Karya - selesai
+- Fase 3: Gallery & Detail - selesai
+- Fase 4: Voting Mechanism - selesai
+- Fase 5: Hasil Voting & Polish - berjalan (fitur inti sudah terpasang)
+- Fase 6: Deploy & Testing - belum dimulai
 
-## Learning Laravel
+## Fitur Utama Saat Ini
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Public & Member
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Landing voting event aktif/selesai.
+- Gallery karya approved per event dengan filter konsentrasi.
+- Detail karya dengan screenshot, deskripsi, dan link demo.
+- Login khusus voter/member.
+- Vote karya dengan guard bisnis:
+	- event harus `voting_open`,
+	- 1 vote per konsentrasi per event,
+	- total maksimal 3 vote per user per event,
+	- akun nonaktif tidak bisa voting.
+- Halaman "Vote Saya" per event.
+- Halaman hasil voting (`/vote/event/{slug}/hasil`) ketika event `closed` atau `archived`:
+	- ranking per konsentrasi,
+	- highlight juara #1,
+	- total voter unik,
+	- total vote,
+	- informasi waktu penutupan voting.
 
-## Laravel Sponsors
+### Admin
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- CRUD event voting.
+- Kontrol status event dengan validasi transisi:
+	- `draft -> submission_open`
+	- `submission_open -> voting_open | draft`
+	- `voting_open -> closed`
+	- `closed -> archived`
+- Timestamp status voting otomatis:
+	- `voting_opened_at`
+	- `voting_closed_at`
+- Review submission (approve/reject).
+- Manajemen member voting.
 
-### Premium Partners
+### UX & Error Handling
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Flash message auto-dismiss (dengan opsi tutup manual).
+- Layout publik dan admin lebih responsif.
+- Error page khusus area voting (`/vote/*`) untuk 403/404/419/429/500.
 
-## Contributing
+## Stack
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- PHP 8.2+
+- Laravel Framework (`laravel/framework` ^12)
+- Blade + Alpine.js
+- Tailwind CSS v4 + Vite
+- MySQL
 
-## Code of Conduct
+## Struktur Kode Penting
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Routes voting: `routes/voting.php`
+- Controller voting: `app/Http/Controllers/Voting/`
+- View voting: `resources/views/voting/`
+- Model domain voting:
+	- `app/Models/VotingEvent.php`
+	- `app/Models/Submission.php`
+	- `app/Models/SubmissionScreenshot.php`
+	- `app/Models/Vote.php`
+- Seeder voting: `database/seeders/VotingSeeder.php`
+- Dokumen requirement:
+	- `docs/TRD-voting-system-v1.md`
+	- `docs/phase/`
+	- `docs/REVISION-LOGS.md`
 
-## Security Vulnerabilities
+## Cara Menjalankan Lokal
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Install dependency:
 
-## License
+	 ```bash
+	 composer install
+	 npm install
+	 ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+2. Siapkan environment:
+
+	 ```bash
+	 cp .env.example .env
+	 php artisan key:generate
+	 ```
+
+3. Setup database + seed:
+
+	 ```bash
+	 php artisan migrate:fresh --seed
+	 php artisan storage:link
+	 ```
+
+4. Jalankan aplikasi:
+
+	 ```bash
+	 npm run dev
+	 php artisan serve
+	 ```
+
+5. Buka:
+
+	 - Home Laravel: `http://127.0.0.1:8000/`
+	 - Voting app: `http://127.0.0.1:8000/vote/`
+
+## Akun Seed Development
+
+- Admin:
+	- email: `admin@inready.com`
+	- password: `password`
+- Member:
+	- email: `member1@inready.com` s.d. `member5@inready.com`
+	- password: `password`
+
+## Event Seed Development
+
+- `inready-showcase-2026` (status: `submission_open`)
+	- `voting_opened_at`: null
+	- `voting_closed_at`: null
+- `inready-voting-2026` (status: `voting_open`)
+	- `voting_opened_at`: terisi default waktu seed
+	- `voting_closed_at`: null
+- `inready-hasil-2026` (status: `closed`)
+	- `voting_opened_at`: terisi default waktu seed
+	- `voting_closed_at`: terisi default waktu seed
+	- berisi sample submission + vote untuk validasi halaman hasil
+
+## Testing
+
+Jalankan seluruh test:
+
+```bash
+php artisan test
+```
+
+Jalankan test voting terkait fase saat ini:
+
+```bash
+php artisan test tests/Feature/Voting/SubmitKaryaTest.php tests/Feature/Voting/VoteMechanismTest.php tests/Feature/Voting/ResultsPageTest.php
+```
+
+## Catatan Tambahan
+
+- Setelah perubahan skema terbaru (termasuk timestamp voting), pastikan menjalankan migrasi terbaru sebelum pengujian.
+- Log revisi development dicatat di `docs/REVISION-LOGS.md` (entri terbaru di bagian paling atas).

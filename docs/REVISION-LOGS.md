@@ -27,6 +27,47 @@ Gunakan template di bawah ini setiap kali mencatat revisi baru. Tambahkan entri 
 
 ## 📜 Daftar Revisi
 
+### v1.0.10 - 15 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Fase 5 (Hasil Voting & Polish)
+
+**Detail Perubahan:**
+- [Changed] Menyesuaikan skema event voting dengan pendekatan non-production: kolom `voting_opened_at` dan `voting_closed_at` ditempatkan langsung di migration utama `database/migrations/2026_03_13_135551_create_voting_events_table.php`.
+- [Changed] Memperbarui `database/seeders/VotingSeeder.php` agar event seed otomatis mengisi default timestamp voting open/closed.
+- [Added] Menambahkan seed event `closed` (`inready-hasil-2026`) beserta sample submission + vote agar halaman hasil voting bisa divalidasi langsung setelah `migrate:fresh --seed`.
+- [Changed] Merapikan UI Fase 5 pada `resources/views/voting/results/index.blade.php` dengan empty state saat belum ada hasil.
+- [Changed] Merapikan responsivitas navbar publik pada `resources/views/voting/layouts/app.blade.php` untuk mencegah overflow nama user/link di layar kecil.
+- [Changed] Merapikan sidebar mobile admin pada `resources/views/voting/layouts/admin.blade.php` (state default tertutup, close on escape, auto-close setelah klik menu).
+- [Changed] Merapikan kontrol transisi status event di `resources/views/voting/admin/events/show.blade.php` agar status yang tidak valid tampil nonaktif.
+- [Changed] Menyempurnakan aksesibilitas gambar dan lazy loading di `resources/views/voting/admin/submissions/index.blade.php`, `resources/views/voting/admin/submissions/show.blade.php`, `resources/views/voting/submit/form.blade.php`, dan `resources/views/voting/vote/my-votes.blade.php`.
+- [Changed] Memperbarui dokumentasi seed event di `README.md` agar sesuai data default terbaru.
+
+**Dampak/Catatan Khusus:**
+- Untuk melihat data hasil voting contoh, jalankan `php artisan migrate:fresh --seed`.
+- Setelah seed, event closed yang siap diuji ada di slug `inready-hasil-2026`.
+
+### v1.0.9 - 15 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Fase 5 (Hasil Voting & Polish)
+
+**Detail Perubahan:**
+- [Added] Menambahkan `ResultController` di `app/Http/Controllers/Voting/ResultController.php` untuk hasil voting per event dengan guard akses hanya saat status event `closed/archived`.
+- [Added] Menambahkan route hasil voting `GET /vote/event/{slug}/hasil` (`voting.results`) di `routes/voting.php`.
+- [Added] Menambahkan view hasil voting `resources/views/voting/results/index.blade.php` berisi ranking per konsentrasi, highlight juara, total voter unik, total vote, dan link kembali ke gallery.
+- [Changed] Menambahkan dukungan kolom `voting_opened_at` dan `voting_closed_at` pada skema `voting_events` untuk kebutuhan hasil voting.
+- [Changed] Memperbarui `app/Models/VotingEvent.php` dengan casts timestamp voting dan helper validasi transisi status `canTransitionTo()`.
+- [Changed] Memperbarui `app/Http/Controllers/Voting/Admin/EventController.php` agar perubahan status event tervalidasi sesuai alur transisi dan otomatis mengisi timestamp buka/tutup voting.
+- [Changed] Menambahkan tombol `Lihat Hasil Voting` pada gallery event closed di `resources/views/voting/gallery/index.blade.php`.
+- [Added] Menambahkan custom error page voting `resources/views/voting/partials/error-page.blade.php` dan exception renderer khusus route `/vote/*` di `bootstrap/app.php`.
+- [Changed] Melakukan polish UI di `resources/views/voting/layouts/app.blade.php` dan `resources/views/voting/layouts/admin.blade.php`: flash auto-dismiss, peningkatan responsif, serta perbaikan kegunaan mobile pada panel admin.
+- [Changed] Menambahkan kontrol status `archived` dan info waktu buka/tutup voting pada `resources/views/voting/admin/events/show.blade.php`.
+- [Added] Menambahkan test Fase 5 di `tests/Feature/Voting/ResultsPageTest.php` untuk guard hasil, ranking/statistik, link hasil di gallery, dan render custom 404 voting.
+- [Changed] Mengganti `README.md` default Laravel menjadi dokumentasi proyek Inready VOTES berbahasa Indonesia yang merangkum fitur hingga fase berjalan.
+
+**Dampak/Catatan Khusus:**
+- Jalankan migrasi terbaru sebelum test: `php artisan migrate` (atau `php artisan migrate:fresh --seed` untuk reset environment lokal).
+- Validasi regresi disarankan dengan: `php artisan test tests/Feature/Voting/SubmitKaryaTest.php tests/Feature/Voting/VoteMechanismTest.php tests/Feature/Voting/ResultsPageTest.php`.
+
 ### v1.0.8 - 14 Maret 2026
 **Author:** AI Assistant
 **Fase Terkait:** Fase 4 (Voting Mechanism)
