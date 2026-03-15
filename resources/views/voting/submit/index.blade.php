@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto">
-        <div class="section-title mb-4">Pilih Event Submission</div>
+    <h1 class="section-title mb-4">Submit Karya Event</h1>
         <p class="section-subtitle mb-8">Pilih event yang sedang membuka tahap penerimaan karya untuk mengunggah karya Anda.
         </p>
 
@@ -36,13 +36,13 @@
                         <p class="card-body text-sm mb-6 flex-1 line-clamp-3">Pendaftaran karya untuk event
                             {{ $event->title }} telah dibuka. Pastikan karya Anda sesuai dengan ketentuan yang berlaku.</p>
 
-                        <div class="flex flex-col sm:flex-row gap-3 w-full mt-auto">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full mt-auto">
                             <x-button href="{{ route('voting.submit.form', $event) }}" variant="primary"
                                 class="w-full justify-center">
                                 Submit Karya
                             </x-button>
                             <x-button href="{{ route('voting.submit.status', $event) }}" variant="outline"
-                                class="w-full sm:w-auto justify-center">
+                                class="w-full justify-center">
                                 Status Saya
                             </x-button>
                         </div>
