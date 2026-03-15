@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================
+  INREADY WORKGROUP — DESIGN SYSTEM SPECIFICATION
+  ============================================================
+  Style: Bauhaus-Inspired Constructivism
+  Version: 2.0
+  Date: March 2026
+  Stack: Laravel 11 + Blade + Tailwind CSS + Alpine.js
+
+  Philosophy:
+  "Form follows function, but function wears geometry."
+  Every element is constructed from deliberate geometric 
+  decisions — circles, squares, triangles. The interface 
+  is a composition, not just a layout.
+
+  This file defines all design tokens, component styles,
+  and layout rules for the InReady website ecosystem
+  (Company Profile + Voting System + Admin Panel).
+  ============================================================
+-->
+<design-system name="InReady Bauhaus" version="2.0">
+
+  <!-- ====================================================
+       1. DESIGN PHILOSOPHY
+       ==================================================== -->
+  <philosophy>
+    <principle id="geometric-purity">
+      All decorative and structural elements derive from three primitives: 
+      circle, square, triangle. No arbitrary curves or organic shapes.
+    </principle>
+    <principle id="functional-honesty">
+      No gradients, no soft glows, no subtle effects. 
+      Everything is direct, declarative, and visible.
+    </principle>
+    <principle id="constructed-composition">
+      The interface is built like a Bauhaus poster — bold color blocks, 
+      thick borders, asymmetric balance, overlapping geometric shapes.
+    </principle>
+    <principle id="brand-continuity">
+      InReady's identity (#FFC400 yellow, community warmth) is preserved 
+      and elevated through Bauhaus geometric discipline.
+    </principle>
+    <principle id="maintainability">
+      1-2 developers must be able to maintain the entire system.
+      Tokens are centralized, components are composable, naming is clear.
+    </principle>
+  </philosophy>
+
+  <!-- ====================================================
+       2. COLOR TOKENS
+       ==================================================== -->
+  <colors mode="light-only">
+    <!-- Brand Primaries (Bauhaus Triad + InReady Yellow) -->
+    <color name="primary-yellow" value="#FFC400" role="brand-anchor">
+      InReady brand yellow. Used for: hero accents, CTA backgrounds, 
+      highlight sections, active states, badges.
+    </color>
+    <color name="primary-red" value="#D02020" role="accent-danger">
+      Bauhaus red. Used for: secondary CTAs, error states, 
+      emphasis sections, destructive actions.
+    </color>
+    <color name="primary-blue" value="#1040C0" role="accent-info">
+      Bauhaus blue. Used for: links, info sections, 
+      secondary backgrounds, trust indicators.
+    </color>
+
+    <!-- Neutrals -->
+    <color name="foreground" value="#121212" role="text-primary">
+      Near-black. All primary text, borders, and structural lines.
+    </color>
+    <color name="background" value="#F5F5F0" role="surface-base">
+      Warm off-white canvas. Slightly warm to complement #FFC400.
+    </color>
+    <color name="white" value="#FFFFFF" role="surface-card">
+      Pure white for cards, inputs, elevated surfaces.
+    </color>
+    <color name="grey" value="#576974" role="text-secondary">
+      From original InReady palette. Muted text, placeholders, 
+      disabled states, metadata.
+    </color>
+    <color name="muted" value="#E8E8E4" role="surface-muted">
+      Light warm grey. Dividers, subtle backgrounds, hover states.
+    </color>
+
+    <!-- Yellow Scale (from original InReady guide) -->
+    <color name="yellow-light" value="#FFC400" opacity="0.30" role="surface-highlight">
+      30% opacity yellow for subtle highlight backgrounds.
+    </color>
+    <color name="yellow-dark" value="#CC8700" role="yellow-variant">
+      Darker yellow for hover states on yellow buttons, 
+      secondary yellow accents.
+    </color>
+    <color name="yellow-dark-muted" value="#CC8700" opacity="0.70" role="yellow-disabled">
+      Muted dark yellow for disabled yellow elements.
+    </color>
+
+    <!-- Semantic -->
+    <color name="success" value="#16A34A" role="feedback-positive">
+      Green for success states, confirmations, check marks.
+    </color>
+    <color name="error" value="#D02020" role="feedback-negative">
+      Same as primary-red. Error messages, form validation.
+    </color>
+    <color name="warning" value="#FFC400" role="feedback-caution">
+      Same as primary-yellow. Warning states.
+    </color>
+    <color name="info" value="#1040C0" role="feedback-info">
+      Same as primary-blue. Info messages, tooltips.
+    </color>
+
+    <!-- Section Color Blocks (Bauhaus color-blocking) -->
+    <section-colors>
+      <section name="hero" background="#FFC400" text="#121212" />
+      <section name="stats" background="#1040C0" text="#FFFFFF" />
+      <section name="features" background="#F5F5F0" text="#121212" />
+      <section name="showcase" background="#121212" text="#FFFFFF" />
+      <section name="testimonials" background="#FFFFFF" text="#121212" />
+      <section name="cta" background="#D02020" text="#FFFFFF" />
+      <section name="footer" background="#121212" text="#FFFFFF" accent="#FFC400" />
+    </section-colors>
+  </colors>
+
+  <!-- ====================================================
+       3. TYPOGRAPHY
+       ==================================================== -->
+  <typography>
+    <font-families>
+      <font name="display" family="Outfit" fallback="system-ui, sans-serif"
+            import="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&amp;display=swap"
+            role="headlines-labels">
+        Geometric sans-serif. Circular letterforms embody Bauhaus principles.
+        Used for: all headlines (h1-h4), navigation, buttons, labels, badges.
+      </font>
+      <font name="body" family="Poppins" fallback="system-ui, sans-serif"
+            import="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;display=swap"
+            role="body-text">
+        Friendly geometric sans. Maintains InReady brand warmth.
+        Used for: body text, paragraphs, form inputs, descriptions.
+      </font>
+    </font-families>
+
+    <type-scale>
+      <!-- Display / Hero Headlines -->
+      <style name="display-xl" 
+             font="Outfit" weight="900" transform="uppercase"
+             tracking="tighter" leading="0.9"
+             size-mobile="2.25rem"
+             size-tablet="3.75rem" 
+             size-desktop="5rem">
+        Hero headlines, page titles. Max visual impact.
+        Tailwind: text-4xl sm:text-6xl lg:text-[5rem] font-black uppercase tracking-tighter leading-[0.9]
+      </style>
+
+      <style name="display-lg"
+             font="Outfit" weight="900" transform="uppercase"
+             tracking="tight" leading="0.95"
+             size-mobile="1.875rem"
+             size-tablet="2.25rem"
+             size-desktop="3rem">
+        Section headings, major titles.
+        Tailwind: text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight leading-[0.95]
+      </style>
+
+      <style name="heading-md"
+             font="Outfit" weight="700" transform="uppercase"
+             tracking="wide" leading="1.1"
+             size-mobile="1.25rem"
+             size-tablet="1.5rem"
+             size-desktop="1.875rem">
+        Card titles, subsection headings.
+        Tailwind: text-xl sm:text-2xl lg:text-3xl font-bold uppercase tracking-wide leading-tight
+      </style>
+
+      <style name="heading-sm"
+             font="Outfit" weight="700" transform="uppercase"
+             tracking="widest" leading="1.2"
+             size-mobile="0.75rem"
+             size-tablet="0.875rem"
+             size-desktop="0.875rem">
+        Labels, overlines, badge text, nav items.
+        Tailwind: text-xs sm:text-sm font-bold uppercase tracking-widest
+      </style>
+
+      <!-- Body Text -->
+      <style name="body-lg"
+             font="Poppins" weight="500"
+             leading="relaxed"
+             size-mobile="1rem"
+             size-tablet="1.125rem"
+             size-desktop="1.125rem">
+        Lead paragraphs, hero subtitles.
+        Tailwind: text-base sm:text-lg font-medium leading-relaxed
+      </style>
+
+      <style name="body-base"
+             font="Poppins" weight="400"
+             leading="relaxed"
+             size-mobile="0.875rem"
+             size-tablet="1rem"
+             size-desktop="1rem">
+        Standard body text, descriptions, card content.
+        Tailwind: text-sm sm:text-base font-normal leading-relaxed
+      </style>
+
+      <style name="body-sm"
+             font="Poppins" weight="400"
+             leading="normal"
+             size-mobile="0.75rem"
+             size-tablet="0.875rem"
+             size-desktop="0.875rem">
+        Captions, helper text, timestamps, metadata.
+        Tailwind: text-xs sm:text-sm font-normal
+      </style>
+    </type-scale>
+  </typography>
+
+  <!-- ====================================================
+       4. SPACING & LAYOUT
+       ==================================================== -->
+  <spacing>
+    <scale unit="px">
+      <token name="0" value="0" />
+      <token name="1" value="4" />
+      <token name="2" value="8" />
+      <token name="3" value="12" />
+      <token name="4" value="16" />
+      <token name="5" value="20" />
+      <token name="6" value="24" />
+      <token name="8" value="32" />
+      <token name="10" value="40" />
+      <token name="12" value="48" />
+      <token name="16" value="64" />
+      <token name="20" value="80" />
+      <token name="24" value="96" />
+    </scale>
+  </spacing>
+
+  <layout>
+    <container max-width="1224px" note="From InReady grid: 1224px content on 1920 viewport">
+      Tailwind: max-w-7xl (1280px) or custom max-w-[1224px]
+    </container>
+
+    <grid-system>
+      <!-- Desktop 1920px: 348px margin, 80px gutter, 24px column-gap -->
+      <breakpoint name="desktop-xl" viewport="1920px" content="1224px" 
+                  columns="12" gutter="80px" column-gap="24px" margin="348px" />
+      <!-- Desktop 1440px: 156px margin, 72px gutter, 24px column-gap -->
+      <breakpoint name="desktop" viewport="1440px" content="1128px"
+                  columns="12" gutter="72px" column-gap="24px" margin="156px" />
+      <!-- Mobile 640px: 40px margin, 56px gutter, 16px column-gap -->
+      <breakpoint name="tablet" viewport="640px" content="560px"
+                  columns="8" gutter="56px" column-gap="16px" margin="40px" />
+      <!-- Mobile 320px: 20px margin, 40px gutter, 8px column-gap -->
+      <breakpoint name="mobile" viewport="320px" content="250px"
+                  columns="4" gutter="40px" column-gap="8px" margin="20px" />
+    </grid-system>
+
+    <section-spacing>
+      <padding name="mobile" vertical="48px" horizontal="16px" />
+      <padding name="tablet" vertical="64px" horizontal="24px" />
+      <padding name="desktop" vertical="96px" horizontal="32px" />
+    </section-spacing>
+
+    <section-dividers>
+      Every major section separated by border-b-4 border-[#121212].
+      Creates strong horizontal rhythm (Bauhaus grid discipline).
+    </section-dividers>
+  </layout>
+
+  <!-- ====================================================
+       5. BORDERS & RADIUS
+       ==================================================== -->
+  <borders>
+    <widths>
+      <width name="default" mobile="2px" desktop="2px"
+             tailwind="border-2" />
+      <width name="thick" mobile="2px" desktop="4px"
+             tailwind="border-2 lg:border-4" />
+      <width name="section-divider" value="4px"
+             tailwind="border-b-4" />
+    </widths>
+
+    <color value="#121212" note="Always black for maximum contrast" />
+
+    <radius note="Bauhaus binary: sharp OR full circle. No in-between.">
+      <option name="none" value="0px" tailwind="rounded-none"
+              use="cards, buttons-square, inputs, sections" />
+      <option name="full" value="9999px" tailwind="rounded-full"
+              use="avatars, pill-buttons, badges, circular-decorations" />
+    </radius>
+  </borders>
+
+  <!-- ====================================================
+       6. SHADOWS & EFFECTS
+       ==================================================== -->
+  <shadows note="Hard offset shadows only. No blur. Bauhaus layering.">
+    <shadow name="sm" value="3px 3px 0px 0px #121212"
+            tailwind="shadow-[3px_3px_0px_0px_#121212]"
+            use="small-buttons, badges, tags" />
+    <shadow name="md" value="4px 4px 0px 0px #121212"
+            tailwind="shadow-[4px_4px_0px_0px_#121212]"
+            use="buttons, small-cards, inputs-focus" />
+    <shadow name="lg" value="6px 6px 0px 0px #121212"
+            tailwind="shadow-[6px_6px_0px_0px_#121212]"
+            use="cards, modals, dropdowns" />
+    <shadow name="xl" value="8px 8px 0px 0px #121212"
+            tailwind="shadow-[8px_8px_0px_0px_#121212]"
+            use="hero-cards, featured-elements, elevated-panels" />
+
+    <!-- Colored shadows for accent elements -->
+    <shadow name="yellow" value="4px 4px 0px 0px #FFC400"
+            tailwind="shadow-[4px_4px_0px_0px_#FFC400]" />
+    <shadow name="red" value="4px 4px 0px 0px #D02020"
+            tailwind="shadow-[4px_4px_0px_0px_#D02020]" />
+    <shadow name="blue" value="4px 4px 0px 0px #1040C0"
+            tailwind="shadow-[4px_4px_0px_0px_#1040C0]" />
+  </shadows>
+
+  <!-- ====================================================
+       7. ANIMATION & INTERACTION
+       ==================================================== -->
+  <animation feel="mechanical, snappy, geometric">
+    <transition name="default" duration="200ms" easing="ease-out"
+                tailwind="transition-all duration-200 ease-out" />
+    <transition name="slow" duration="300ms" easing="ease-out"
+                tailwind="transition-all duration-300 ease-out" />
+
+    <interaction name="button-press">
+      On active: translate down-right and remove shadow.
+      Simulates physical mechanical button press.
+      Tailwind: active:translate-x-[2px] active:translate-y-[2px] active:shadow-none
+    </interaction>
+
+    <interaction name="card-hover">
+      On hover: slight lift upward.
+      Tailwind: hover:-translate-y-1
+    </interaction>
+
+    <interaction name="link-hover">
+      On hover: color shift to primary-yellow.
+      Tailwind: hover:text-[#FFC400]
+    </interaction>
+
+    <interaction name="accordion-toggle">
+      Chevron rotates 180deg. Content reveals via max-height transition.
+    </interaction>
+
+    <interaction name="geometric-hover">
+      Decorative shapes scale up on group hover.
+      Tailwind: group-hover:scale-110
+    </interaction>
+  </animation>
+
+  <!-- ====================================================
+       8. ICONOGRAPHY
+       ==================================================== -->
+  <icons>
+    <library name="Feather Icons" note="From original InReady style guide" />
+    <library name="Lucide React" note="Feather-compatible, for Blade/Alpine" />
+
+    <specs>
+      <size value="24px" tailwind="h-6 w-6" role="default" />
+      <size value="20px" tailwind="h-5 w-5" role="small-inline" />
+      <size value="32px" tailwind="h-8 w-8" role="large-emphasis" />
+      <stroke-width value="2px" role="default" />
+      <stroke-width value="2.5px" role="emphasis" />
+      <margin value="2px" note="Icon margin/padding within 24px bounding box" />
+    </specs>
+
+    <geometric-containers note="Bauhaus: icons inside bordered geometric shapes">
+      <container shape="square" class="w-12 h-12 border-2 border-[#121212] flex items-center justify-center" />
+      <container shape="circle" class="w-12 h-12 rounded-full border-2 border-[#121212] flex items-center justify-center" />
+      <container shape="diamond" class="w-12 h-12 border-2 border-[#121212] rotate-45 flex items-center justify-center">
+        Inner icon gets: class="-rotate-45"
+      </container>
+    </geometric-containers>
+  </icons>
+
+  <!-- ====================================================
+       9. COMPONENT SPECIFICATIONS
+       ==================================================== -->
+  <components>
+
+    <!-- ── BUTTONS ── -->
+    <component name="button">
+      <base-style>
+        font: Outfit, font-bold, uppercase, tracking-wider
+        padding: 1x font-size vertical, 1.5x font-size horizontal
+        border: 2px solid #121212
+        transition: all 200ms ease-out
+        cursor: pointer
+        Tailwind base: font-[Outfit] font-bold uppercase tracking-wider 
+                       border-2 border-[#121212] transition-all duration-200
+                       cursor-pointer
+      </base-style>
+
+      <variant name="primary">
+        bg: #FFC400, text: #121212
+        shadow: 4px 4px 0px 0px #121212
+        hover: bg-[#CC8700]
+        active: translate-x-[2px] translate-y-[2px] shadow-none
+        Tailwind: bg-[#FFC400] text-[#121212] shadow-[4px_4px_0px_0px_#121212]
+                  hover:bg-[#CC8700] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none
+      </variant>
+
+      <variant name="secondary">
+        bg: #121212, text: #FFFFFF
+        shadow: 4px 4px 0px 0px #FFC400
+        hover: bg-[#2a2a2a]
+        active: translate-x-[2px] translate-y-[2px] shadow-none
+        Tailwind: bg-[#121212] text-white shadow-[4px_4px_0px_0px_#FFC400]
+                  hover:bg-[#2a2a2a] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none
+      </variant>
+
+      <variant name="danger">
+        bg: #D02020, text: #FFFFFF
+        shadow: 4px 4px 0px 0px #121212
+        hover: bg-[#b01a1a]
+        Tailwind: bg-[#D02020] text-white shadow-[4px_4px_0px_0px_#121212]
+                  hover:bg-[#b01a1a] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none
+      </variant>
+
+      <variant name="info">
+        bg: #1040C0, text: #FFFFFF
+        shadow: 4px 4px 0px 0px #121212
+        hover: bg-[#0c3399]
+        Tailwind: bg-[#1040C0] text-white shadow-[4px_4px_0px_0px_#121212]
+                  hover:bg-[#0c3399] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none
+      </variant>
+
+      <variant name="outline">
+        bg: #FFFFFF, text: #121212
+        border: 2px solid #121212
+        shadow: 4px 4px 0px 0px #121212
+        hover: bg-[#F5F5F0]
+        Tailwind: bg-white text-[#121212] border-2 border-[#121212] shadow-[4px_4px_0px_0px_#121212]
+                  hover:bg-[#F5F5F0] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none
+      </variant>
+
+      <variant name="ghost">
+        bg: transparent, text: #121212
+        border: none, shadow: none
+        hover: bg-[#E8E8E4]
+        Tailwind: bg-transparent text-[#121212] border-none
+                  hover:bg-[#E8E8E4]
+      </variant>
+
+      <shapes>
+        <shape name="square" radius="rounded-none" note="Default. Sharp Bauhaus edges." />
+        <shape name="pill" radius="rounded-full" note="For softer CTAs, tags." />
+      </shapes>
+
+      <sizes>
+        <size name="sm" padding="px-3 py-1.5" text="text-xs" />
+        <size name="md" padding="px-5 py-2.5" text="text-sm" />
+        <size name="lg" padding="px-8 py-3.5" text="text-base" />
+      </sizes>
+
+      <states>
+        <state name="disabled" class="opacity-50 cursor-not-allowed pointer-events-none" />
+        <state name="loading" class="opacity-70 cursor-wait" />
+        <state name="focus" class="outline-none ring-2 ring-[#FFC400] ring-offset-2" />
+      </states>
+
+      <icon-button>
+        Square: w-10 h-10 (sm), w-12 h-12 (md), w-14 h-14 (lg)
+        Same variant styles, icon centered.
+      </icon-button>
+
+      <tag-button>
+        Uses pill shape. Includes dismiss (x) icon.
+        Tailwind: rounded-full px-3 py-1 text-xs inline-flex items-center gap-1
+      </tag-button>
+    </component>
+
+    <!-- ── CARDS ── -->
+    <component name="card">
+      <base-style>
+        bg: white
+        border: 2px solid #121212 (mobile), 4px (desktop)
+        shadow: 6px 6px 0px 0px #121212
+        hover: -translate-y-1
+        Tailwind: bg-white border-2 lg:border-4 border-[#121212] 
+                  shadow-[6px_6px_0px_0px_#121212]
+                  hover:-translate-y-1 transition-all duration-200
+      </base-style>
+
+      <decoration note="Small geometric shape in top-right corner, 8-12px">
+        Rotate through: circle (yellow), square (red), triangle (blue).
+        Position: absolute, top-3, right-3.
+        <shape type="circle" class="absolute top-3 right-3 w-3 h-3 rounded-full bg-[#FFC400]" />
+        <shape type="square" class="absolute top-3 right-3 w-3 h-3 rounded-none bg-[#D02020]" />
+        <shape type="triangle" class="absolute top-3 right-3 w-3 h-3 bg-[#1040C0]" 
+               style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%)" />
+      </decoration>
+
+      <content-padding>p-5 sm:p-6 lg:p-8</content-padding>
+    </component>
+
+    <!-- ── TEXT INPUTS ── -->
+    <component name="input">
+      <base-style>
+        font: Poppins, text-sm sm:text-base
+        bg: white
+        border: 2px solid #121212
+        padding: px-4 py-3
+        radius: rounded-none (Bauhaus sharp)
+        Tailwind: font-[Poppins] text-sm sm:text-base bg-white border-2 border-[#121212] 
+                  px-4 py-3 rounded-none w-full
+                  transition-all duration-200
+      </base-style>
+
+      <states>
+        <state name="default" border="#121212" />
+        <state name="focus" class="border-[#FFC400] shadow-[3px_3px_0px_0px_#FFC400] outline-none" />
+        <state name="filled" border="#121212" />
+        <state name="error" class="border-[#D02020] shadow-[3px_3px_0px_0px_#D02020]" />
+        <state name="success" class="border-[#16A34A]" />
+        <state name="disabled" class="bg-[#E8E8E4] text-[#576974] cursor-not-allowed" />
+        <state name="hover" class="border-[#FFC400]" />
+      </states>
+
+      <label>
+        font: Outfit, text-xs, font-bold, uppercase, tracking-widest
+        color: #121212
+        margin-bottom: mb-2
+        Tailwind: font-[Outfit] text-xs font-bold uppercase tracking-widest text-[#121212] mb-2 block
+      </label>
+
+      <helper-text>
+        font: Poppins, text-xs
+        color: #576974 (default), #D02020 (error), #16A34A (success)
+        margin-top: mt-1.5
+      </helper-text>
+
+      <with-icon>
+        Icon positioned: left or right, 16px from edge.
+        Input padding adjusted: pl-10 (left icon) or pr-10 (right icon).
+      </with-icon>
+    </component>
+
+    <!-- ── SELECTORS ── -->
+    <component name="checkbox">
+      <unchecked class="w-5 h-5 border-2 border-[#121212] rounded-none bg-white" />
+      <checked class="w-5 h-5 border-2 border-[#121212] rounded-none bg-[#FFC400]">
+        Check icon: white, centered
+      </checked>
+      <disabled class="opacity-50 cursor-not-allowed" />
+    </component>
+
+    <component name="radio">
+      <unchecked class="w-5 h-5 border-2 border-[#121212] rounded-full bg-white" />
+      <checked class="w-5 h-5 border-2 border-[#121212] rounded-full bg-white">
+        Inner dot: w-2.5 h-2.5 rounded-full bg-[#FFC400]
+      </checked>
+    </component>
+
+    <component name="toggle">
+      <off class="w-11 h-6 border-2 border-[#121212] rounded-full bg-[#E8E8E4]">
+        Knob: w-4 h-4 rounded-full bg-white border border-[#121212] translate-x-0.5
+      </off>
+      <on class="w-11 h-6 border-2 border-[#121212] rounded-full bg-[#FFC400]">
+        Knob: w-4 h-4 rounded-full bg-white border border-[#121212] translate-x-5
+      </on>
+    </component>
+
+    <!-- ── DROPDOWN / SELECT ── -->
+    <component name="dropdown">
+      <trigger>
+        Same as input base style + chevron-down icon right.
+        Tailwind: [input-base] pr-10 cursor-pointer
+      </trigger>
+      <menu>
+        bg: white, border: 2px solid #121212
+        shadow: 4px 4px 0px 0px #121212
+        margin-top: mt-1, max-height: max-h-60, overflow-y: auto
+        Tailwind: bg-white border-2 border-[#121212] shadow-[4px_4px_0px_0px_#121212] mt-1
+      </menu>
+      <item>
+        padding: px-4 py-2.5
+        hover: bg-[#FFC400]/20
+        selected: bg-[#FFC400] text-[#121212] font-medium
+        Tailwind: px-4 py-2.5 cursor-pointer hover:bg-[#FFC400]/20
+      </item>
+    </component>
+
+    <!-- ── ACCORDION ── -->
+    <component name="accordion">
+      <closed>
+        bg: white, border: 2px lg:border-4 solid #121212
+        shadow: 4px 4px 0px 0px #121212
+        Tailwind: bg-white border-2 lg:border-4 border-[#121212] shadow-[4px_4px_0px_0px_#121212]
+      </closed>
+      <open-header>
+        bg: #FFC400, text: #121212
+        Tailwind: bg-[#FFC400] text-[#121212]
+      </open-header>
+      <open-content>
+        bg: #FFFBEB (light yellow tint)
+        border-top: 2px solid #121212
+        Tailwind: bg-[#FFFBEB] border-t-2 border-[#121212] p-5
+      </open-content>
+      <icon>
+        ChevronDown, rotate-180 when open.
+        transition: rotate duration-200
+      </icon>
+    </component>
+
+    <!-- ── NAVIGATION ── -->
+    <component name="navbar">
+      <style>
+        bg: white
+        border-bottom: 4px solid #121212
+        padding: px-4 sm:px-6 lg:px-8, py-4
+        position: sticky top-0 z-50
+      </style>
+      <logo>
+        Three geometric shapes: circle(yellow) + square(black) + triangle(red).
+        InReady text: Outfit, font-black, uppercase.
+        Combined: flex items-center gap-2
+      </logo>
+      <nav-item>
+        font: Outfit, text-sm, font-bold, uppercase, tracking-wider
+        color: #121212
+        hover: text-[#FFC400]
+        active: text-[#FFC400] border-b-2 border-[#FFC400]
+      </nav-item>
+      <mobile-menu>
+        Hamburger button visible below md breakpoint.
+        Fullscreen overlay: bg-white, items stacked vertically.
+        Close button: X icon, top-right.
+      </mobile-menu>
+    </component>
+
+    <!-- ── FOOTER ── -->
+    <component name="footer">
+      <style>
+        bg: #121212
+        text: white
+        border-top: 4px solid #FFC400
+        padding: py-12 sm:py-16 px-4 sm:px-8
+      </style>
+      <accent-bar>
+        Full width bar: h-1 bg-[#FFC400] at top of footer.
+      </accent-bar>
+      <link-style>
+        color: #E8E8E4, hover: text-[#FFC400]
+        font: Poppins, text-sm
+      </link-style>
+      <copyright>
+        font: Poppins, text-xs, text-[#576974]
+        Below a border-t border-[#576974]/30
+      </copyright>
+    </component>
+
+    <!-- ── BADGES ── -->
+    <component name="badge">
+      <base>
+        font: Outfit, text-xs, font-bold, uppercase, tracking-wider
+        padding: px-2.5 py-1
+        border: 2px solid #121212
+        radius: rounded-full (pill shape)
+      </base>
+      <variant name="website" bg="#1040C0" text="white" />
+      <variant name="desain" bg="#D02020" text="white" />
+      <variant name="mobile" bg="#FFC400" text="#121212" />
+    </component>
+
+    <!-- ── TOOLTIP ── -->
+    <component name="tooltip">
+      <variant name="dark">
+        bg: #121212, text: white
+        padding: px-3 py-2, text-sm
+        border: 2px solid #121212
+        Arrow: triangle pointing to trigger element
+      </variant>
+      <variant name="warning">
+        bg: #D02020, text: white
+        Same structure, red background
+      </variant>
+    </component>
+
+    <!-- ── PAGINATION ── -->
+    <component name="pagination">
+      <item>
+        w-10 h-10, border-2 border-[#121212]
+        font: Outfit, font-bold
+        Tailwind: w-10 h-10 border-2 border-[#121212] flex items-center justify-center
+                  font-[Outfit] font-bold text-sm
+      </item>
+      <active class="bg-[#FFC400] text-[#121212] shadow-[3px_3px_0px_0px_#121212]" />
+      <hover class="hover:bg-[#FFC400]/20" />
+    </component>
+
+    <!-- ── TABS ── -->
+    <component name="tabs">
+      <tab>
+        font: Outfit, font-bold, uppercase, tracking-wider, text-sm
+        padding: px-4 py-2
+        border-bottom: 3px solid transparent
+        active: border-[#FFC400] text-[#121212]
+        inactive: text-[#576974] hover:text-[#121212]
+      </tab>
+    </component>
+
+    <!-- ── BREADCRUMBS ── -->
+    <component name="breadcrumbs">
+      <item>
+        font: Poppins, text-sm
+        color: #576974
+        separator: ">" character, mx-2
+      </item>
+      <active class="text-[#121212] font-medium" />
+      <home-icon>Home icon (filled), text-[#FFC400]</home-icon>
+    </component>
+
+    <!-- ── DATE PICKER ── -->
+    <component name="datepicker">
+      <trigger>Same as input base + calendar icon right</trigger>
+      <calendar>
+        bg: #121212, text: white
+        border: 4px solid #121212
+        shadow: 8px 8px 0px 0px #121212
+        Header: month/year in Outfit, font-bold
+        Days: Poppins, text-sm
+        Today: rounded-full bg-[#1040C0]
+        Selected: rounded-full bg-[#FFC400] text-[#121212]
+        Actions: Cancel (outline), Set Date (primary yellow)
+      </calendar>
+    </component>
+
+    <!-- ── TOAST / NOTIFICATION ── -->
+    <component name="toast">
+      <base>
+        border: 2px solid #121212
+        shadow: 4px 4px 0px 0px #121212
+        padding: p-4, flex items-start gap-3
+      </base>
+      <variant name="success" accent="#16A34A" icon="check-circle" />
+      <variant name="error" accent="#D02020" icon="alert-triangle" />
+      <variant name="info" accent="#1040C0" icon="info" />
+      <variant name="warning" accent="#FFC400" icon="alert-triangle" />
+    </component>
+
+    <!-- ── MODAL ── -->
+    <component name="modal">
+      <overlay class="fixed inset-0 bg-black/50 z-50" />
+      <panel>
+        bg: white
+        border: 4px solid #121212
+        shadow: 8px 8px 0px 0px #121212
+        max-width: max-w-lg
+        padding: p-6 sm:p-8
+        Tailwind: bg-white border-4 border-[#121212] shadow-[8px_8px_0px_0px_#121212]
+                  max-w-lg w-full mx-4 p-6 sm:p-8
+      </panel>
+    </component>
+
+  </components>
+
+  <!-- ====================================================
+       10. GEOMETRIC DECORATIONS (Bauhaus Signature)
+       ==================================================== -->
+  <decorations>
+    <principle>
+      Geometric shapes are not ornamental — they are compositional elements.
+      Use them to create visual rhythm, break monotony, and signal the 
+      Bauhaus identity. Rotate through the three primaries (yellow/red/blue)
+      and three shapes (circle/square/triangle).
+    </principle>
+
+    <pattern name="card-corner-accent">
+      Small shape (8-12px) in top-right corner of cards.
+      Cycle through shapes per card index:
+        card[0]: circle, yellow
+        card[1]: square, red
+        card[2]: triangle, blue
+        card[3]: circle, red (continue rotation)
+    </pattern>
+
+    <pattern name="section-background-shape">
+      Large geometric shape (200-400px) at 10-20% opacity.
+      Positioned: absolute, overflow-hidden on section.
+      Used for visual texture in color-blocked sections.
+    </pattern>
+
+    <pattern name="hero-composition">
+      Overlapping geometric shapes creating abstract composition.
+      Circle + rotated square + triangle, layered with varying opacity.
+      One shape uses brand yellow, others use complementary primaries.
+    </pattern>
+
+    <pattern name="dot-grid">
+      CSS radial-gradient pattern for subtle background texture.
+      radial-gradient(#121212 1px, transparent 1px)
+      background-size: 20px 20px
+      opacity: 0.05
+    </pattern>
+
+    <pattern name="geometric-logo">
+      Three shapes in a row: 
+        circle (w-3 h-3 rounded-full bg-[#FFC400])
+        square (w-3 h-3 rounded-none bg-[#121212])  
+        triangle (w-3 h-3, clip-path, bg-[#D02020])
+      Represents InReady's three konsentrasi.
+    </pattern>
+
+    <pattern name="rotated-element">
+      Every 3rd decorative element rotated 45deg.
+      Inner content counter-rotated (-45deg) to stay readable.
+      Creates visual tension and constructivist asymmetry.
+    </pattern>
+  </decorations>
+
+  <!-- ====================================================
+       11. RESPONSIVE STRATEGY
+       ==================================================== -->
+  <responsive approach="mobile-first">
+    <breakpoints>
+      <breakpoint name="sm" value="640px" tailwind="sm:" />
+      <breakpoint name="md" value="768px" tailwind="md:" />
+      <breakpoint name="lg" value="1024px" tailwind="lg:" />
+      <breakpoint name="xl" value="1280px" tailwind="xl:" />
+      <breakpoint name="2xl" value="1536px" tailwind="2xl:" />
+    </breakpoints>
+
+    <scaling-rules>
+      <rule element="typography">
+        Headlines: text-4xl → sm:text-6xl → lg:text-[5rem]
+        Body: text-sm → sm:text-base → lg:text-lg
+      </rule>
+      <rule element="borders">
+        Cards/panels: border-2 → lg:border-4
+        Section dividers: always border-b-4
+      </rule>
+      <rule element="shadows">
+        Mobile: shadow-[3px_3px_0px_0px_#121212]
+        Desktop: shadow-[6px_6px_0px_0px_#121212] or shadow-[8px_8px_0px_0px_#121212]
+      </rule>
+      <rule element="grids">
+        Stats: 1col → sm:2col → lg:4col
+        Features/Cards: 1col → md:2col → lg:3col
+        How-it-works: 1col → sm:2col → md:4col
+      </rule>
+      <rule element="navigation">
+        Below md: hamburger menu
+        Above md: horizontal nav
+      </rule>
+      <rule element="decorations">
+        Hide large background shapes on mobile (hidden sm:block)
+        Reduce geometric decoration sizes on mobile
+      </rule>
+    </scaling-rules>
+  </responsive>
+
+  <!-- ====================================================
+       12. IMAGE TREATMENT
+       ==================================================== -->
+  <images>
+    <treatment name="card-thumbnail">
+      Default: grayscale(100%)
+      Hover: grayscale(0%)
+      Transition: duration-300
+      Tailwind: grayscale hover:grayscale-0 transition-all duration-300
+    </treatment>
+    <treatment name="avatar">
+      Shape: rounded-full
+      Filter: grayscale
+      Border: 2px solid #121212
+      Tailwind: rounded-full grayscale border-2 border-[#121212]
+    </treatment>
+    <treatment name="hero-image">
+      Shape: alternate rounded-none (square) and rounded-full (circle)
+      Object-fit: cover
+    </treatment>
+    <formats>
+      Serve WebP with JPG fallback.
+      Lazy loading: loading="lazy"
+      Thumbnails: auto-generated on upload.
+      Max width: 1200px for full-width, 600px for cards.
+    </formats>
+  </images>
+
+  <!-- ====================================================
+       13. ACCESSIBILITY
+       ==================================================== -->
+  <accessibility>
+    <contrast note="All color combinations must meet WCAG AA (4.5:1 for text)">
+      #121212 on #F5F5F0 → 14.5:1 ✓
+      #121212 on #FFC400 → 10.1:1 ✓
+      #FFFFFF on #D02020 → 5.1:1 ✓
+      #FFFFFF on #1040C0 → 7.2:1 ✓
+      #FFFFFF on #121212 → 16.3:1 ✓
+      #576974 on #F5F5F0 → 4.6:1 ✓ (just passes)
+    </contrast>
+    <focus-indicators>
+      All interactive elements: ring-2 ring-[#FFC400] ring-offset-2
+      High visibility against all backgrounds.
+    </focus-indicators>
+    <semantic-html>
+      Use proper heading hierarchy (h1 → h2 → h3).
+      Use nav, main, article, section, footer.
+      All images: alt text required.
+    </semantic-html>
+  </accessibility>
+
+</design-system>

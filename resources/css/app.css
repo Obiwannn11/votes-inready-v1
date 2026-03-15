@@ -6,6 +6,38 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-primary-yellow: #FFC400;
+    --color-primary-yellow-dark: #CC8700;
+    --color-primary-yellow-light: rgba(255, 196, 0, 0.30);
+    --color-primary-red: #D02020;
+    --color-primary-red-dark: #B01A1A;
+    --color-primary-blue: #1040C0;
+    --color-primary-blue-dark: #0C3399;
+    --color-ink: #121212;
+    --color-canvas: #F5F5F0;
+    --color-surface: #FFFFFF;
+    --color-grey: #576974;
+    --color-muted: #E8E8E4;
+    --color-success: #16A34A;
+
+    --font-display: 'Outfit', system-ui, sans-serif;
+    --font-body: 'Poppins', system-ui, sans-serif;
+    --font-sans: 'Poppins', system-ui, sans-serif;
+
+    --shadow-sm: 3px 3px 0px 0px var(--color-ink);
+    --shadow-md: 4px 4px 0px 0px var(--color-ink);
+    --shadow-lg: 6px 6px 0px 0px var(--color-ink);
+    --shadow-xl: 8px 8px 0px 0px var(--color-ink);
+    
+    --shadow-yellow: 4px 4px 0px 0px var(--color-primary-yellow);
+    --shadow-red: 4px 4px 0px 0px var(--color-primary-red);
+    --shadow-blue: 4px 4px 0px 0px var(--color-primary-blue);
+}
+
+@layer base {
+    body {
+        background-color: var(--color-canvas);
+        color: var(--color-ink);
+        -webkit-font-smoothing: antialiased;
+    }
 }

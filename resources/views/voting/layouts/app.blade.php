@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Inready VOTES')</title>
+    <!-- Google Fonts for InReady Bauhaus Design System -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -21,10 +27,11 @@
     @stack('styles')
 </head>
 
-<body class="bg-gray-50 min-h-screen">
-    <nav class="bg-white shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-            <a href="{{ route('voting.landing') }}" class="font-bold text-base sm:text-lg shrink-0">
+<body class="bg-canvas text-ink min-h-screen font-body antialiased">
+    <nav class="bg-surface border-b-4 border-ink shadow-sm">
+        <div class="max-w-[1224px] mx-auto px-4 py-3 flex items-center justify-between gap-3">
+            <a href="{{ route('voting.landing') }}"
+                class="font-display font-black text-lg sm:text-xl uppercase tracking-widest shrink-0 text-ink">
                 Inready VOTES
             </a>
             <div class="flex items-center justify-end gap-2 sm:gap-3 min-w-0">
@@ -55,8 +62,8 @@
     </nav>
 
     @if (\Illuminate\Support\Facades\Session::has('success'))
-        <div class="max-w-6xl mx-auto px-4 mt-4" x-data="{ show: true }" x-show="show" x-cloak x-transition>
-            <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded flex items-start justify-between gap-3"
+        <div class="max-w-[1224px] mx-auto px-4 mt-6" x-data="{ show: true }" x-show="show" x-cloak x-transition>
+            <div class="bg-success/10 border-2 border-success text-success px-4 py-3 shadow-sm flex items-start justify-between gap-3"
                 x-init="setTimeout(() => show = false, 5000)">
                 <span>{{ \Illuminate\Support\Facades\Session::get('success') }}</span>
                 <button type="button" class="text-green-700 hover:text-green-900" @click="show = false"
@@ -66,8 +73,8 @@
     @endif
 
     @if (\Illuminate\Support\Facades\Session::has('error'))
-        <div class="max-w-6xl mx-auto px-4 mt-4" x-data="{ show: true }" x-show="show" x-cloak x-transition>
-            <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded flex items-start justify-between gap-3"
+        <div class="max-w-[1224px] mx-auto px-4 mt-6" x-data="{ show: true }" x-show="show" x-cloak x-transition>
+            <div class="bg-primary-red/10 border-2 border-primary-red text-primary-red px-4 py-3 shadow-sm flex items-start justify-between gap-3"
                 x-init="setTimeout(() => show = false, 5000)">
                 <span>{{ \Illuminate\Support\Facades\Session::get('error') }}</span>
                 <button type="button" class="text-red-700 hover:text-red-900" @click="show = false"
@@ -76,7 +83,7 @@
         </div>
     @endif
 
-    <main class="max-w-6xl mx-auto px-4 py-6">
+    <main class="max-w-[1224px] mx-auto px-4 py-8 sm:py-12">
         @yield('content')
     </main>
 
