@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto">
-    <h1 class="section-title mb-4">Submit Karya Event</h1>
+        <h1 class="section-title mb-4">Submit Karya Event</h1>
         <p class="section-subtitle mb-8">Pilih event yang sedang membuka tahap penerimaan karya untuk mengunggah karya Anda.
         </p>
 

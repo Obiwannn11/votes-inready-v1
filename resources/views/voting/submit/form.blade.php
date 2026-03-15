@@ -40,12 +40,12 @@
             removeScreenshot() {
                 if (this.screenshotRemoveIndex === null) return;
                 this.screenshotFiles.splice(this.screenshotRemoveIndex, 1);
-                
+        
                 // Update file input using DataTransfer
                 const dt = new DataTransfer();
                 this.screenshotFiles.forEach(f => dt.items.add(f.file));
                 this.$refs.screenshotInput.files = dt.files;
-                
+        
                 this.screenshotRemoveIndex = null;
             }
         }">
@@ -71,7 +71,8 @@
                             <label class="cursor-pointer relative">
                                 <input type="radio" name="concentration" value="{{ $val }}"
                                     {{ old('concentration') === $val ? 'checked' : '' }} required class="peer sr-only">
-                                <div class="w-full text-center border-2 border-ink p-3 font-body font-bold text-sm bg-surface text-ink transition-all peer-checked:bg-primary-yellow peer-checked:shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-muted">
+                                <div
+                                    class="w-full text-center border-2 border-ink p-3 font-body font-bold text-sm bg-surface text-ink transition-all peer-checked:bg-primary-yellow peer-checked:shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-muted">
                                     {{ $label }}
                                 </div>
                             </label>
@@ -116,8 +117,8 @@
                             required @change="preview = URL.createObjectURL($event.target.files[0])"
                             class="w-full border-2 border-ink p-1 bg-surface text-sm {{ $errors->has('thumbnail') ? 'border-primary-red' : '' }} file:bg-ink file:text-surface file:border-2 file:border-ink file:px-4 file:py-2 file:mr-4 file:font-bold file:cursor-pointer hover:file:bg-ink/80 focus:outline-none focus:shadow-[4px_4px_0px_0px_var(--color-ink)] transition-shadow">
                         <img x-show="preview" :src="preview"
-                            class="mt-4 max-h-48 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] object-cover bg-canvas" x-cloak
-                            alt="Preview thumbnail karya">
+                            class="mt-4 max-h-48 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] object-cover bg-canvas"
+                            x-cloak alt="Preview thumbnail karya">
                         @error('thumbnail')
                             <p class="form-helper error mt-1">{{ $message }}</p>
                         @enderror
@@ -129,14 +130,16 @@
                         <input type="file" name="screenshots[]" id="screenshots" accept="image/jpeg,image/png,image/webp"
                             multiple x-ref="screenshotInput" @change="handleScreenshots"
                             class="w-full border-2 border-ink p-1 bg-surface text-sm {{ $errors->has('screenshots') || $errors->has('screenshots.*') ? 'border-primary-red' : '' }} file:bg-canvas file:text-ink file:border-2 file:border-ink file:px-4 file:py-1 file:mr-4 file:font-bold file:cursor-pointer hover:file:bg-muted focus:outline-none focus:shadow-[4px_4px_0px_0px_var(--color-ink)] transition-shadow">
-                        
+
                         <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4" x-show="screenshotFiles.length > 0" x-cloak>
                             <template x-for="(fileObj, index) in screenshotFiles" :key="index">
-                                <div class="relative border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] group aspect-[4/3] bg-canvas overflow-hidden">
-                                    <img :src="fileObj.url" class="object-cover w-full h-full cursor-pointer transition-transform duration-300 group-hover:scale-105" 
+                                <div
+                                    class="relative border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] group aspect-[4/3] bg-canvas overflow-hidden">
+                                    <img :src="fileObj.url"
+                                        class="object-cover w-full h-full cursor-pointer transition-transform duration-300 group-hover:scale-105"
                                         @click="previewModal = fileObj.url" alt="Screenshot Tambahan">
-                                    <button type="button" @click.stop="confirmRemoveScreenshot(index)" 
-                                        class="absolute top-2 right-2 bg-primary-red text-surface border-2 border-ink w-8 h-8 flex items-center justify-center font-bold font-display opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 shadow-[2px_2px_0px_0px_var(--color-ink)]" 
+                                    <button type="button" @click.stop="confirmRemoveScreenshot(index)"
+                                        class="absolute top-2 right-2 bg-primary-red text-surface border-2 border-ink w-8 h-8 flex items-center justify-center font-bold font-display opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 shadow-[2px_2px_0px_0px_var(--color-ink)]"
                                         title="Hapus gambar ini">X</button>
                                 </div>
                             </template>
@@ -178,7 +181,7 @@
                         Submit Final Karya
                     </x-button>
                 </div>
-            {{-- Main Form Content Ended --}}
+                {{-- Main Form Content Ended --}}
             </form>
 
             {{-- Fullscreen Image Preview Modal --}}
@@ -186,8 +189,12 @@
                 class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/90 backdrop-blur-sm"
                 @click="previewModal = null" @keydown.escape.window="previewModal = null">
                 <div class="relative max-w-5xl w-full flex flex-col items-center">
-                    <button @click="previewModal = null" class="absolute -top-12 right-0 text-surface font-display font-black text-xl hover:text-primary-yellow">TUTUP X</button>
-                    <img :src="previewModal" class="border-4 border-surface shadow-[8px_8px_0px_0px_var(--color-primary-yellow)] max-h-[80vh] object-contain bg-canvas" alt="Preview Gambar Layar Penuh" @click.stop>
+                    <button @click="previewModal = null"
+                        class="absolute -top-12 right-0 text-surface font-display font-black text-xl hover:text-primary-yellow">TUTUP
+                        X</button>
+                    <img :src="previewModal"
+                        class="border-4 border-surface shadow-[8px_8px_0px_0px_var(--color-primary-yellow)] max-h-[80vh] object-contain bg-canvas"
+                        alt="Preview Gambar Layar Penuh" @click.stop>
                 </div>
             </div>
 
@@ -196,16 +203,19 @@
                 class="fixed inset-0 z-[60] flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-ink/50 backdrop-blur-sm" @click="screenshotRemoveIndex = null"></div>
 
-                <div class="bg-surface border-4 border-ink p-6 max-w-sm w-full shadow-[8px_8px_0px_0px_var(--color-ink)] z-10 relative text-center">
+                <div
+                    class="bg-surface border-4 border-ink p-6 max-w-sm w-full shadow-[8px_8px_0px_0px_var(--color-ink)] z-10 relative text-center">
                     <div class="icon-container mb-4 mx-auto bg-primary-red text-surface border-2 border-ink">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                         </svg>
                     </div>
                     <h3 class="font-display font-black text-xl mb-2 text-ink uppercase">Hapus Screenshot?</h3>
-                    <p class="font-body text-sm text-ink/80 mb-6">Screenshot yang dipilih akan dihapus dari daftar upload ini.</p>
-                    
+                    <p class="font-body text-sm text-ink/80 mb-6">Screenshot yang dipilih akan dihapus dari daftar upload
+                        ini.</p>
+
                     <div class="flex justify-center gap-3">
                         <x-button type="button" variant="outline" @click="screenshotRemoveIndex = null">Batal</x-button>
                         <x-button type="button" variant="danger" @click="removeScreenshot()">Ya, Hapus</x-button>
