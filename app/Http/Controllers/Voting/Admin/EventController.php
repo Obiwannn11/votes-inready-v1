@@ -69,9 +69,34 @@ class EventController extends Controller
             'status' => 'required|in:draft,submission_open,voting_open,closed,archived',
         ]);
 
-        // Logic check validasi status transition bisa ditambahkan di sini.
+        $newStatus = $data['status'];
 
-        $event->update(['status' => $data['status']]);
-        return Redirect::back()->with('success', "Status diubah ke {$data['status']}.");
+        if ($newStatus === $event->status) {
+            return Redirect::back()->with('success', "Status event tetap {$newStatus}.");
+        }
+
+        if (!$event->canTransitionTo($newStatus)) {
+            return Redirect::back()->with('error', "Transisi status tidak valid dari {$event->status} ke {$newStatus}.");
+        }
+
+        $updates = ['status' => $newStatus];
+
+        if ($newStatus === 'voting_open' && !$event->voting_opened_at) {
+            $updates['voting_opened_at'] = now();
+            $updates['voting_closed_at'] = null;
+        }
+
+        if ($newStatus === 'closed' && !$event->voting_closed_at) {
+            $updates['voting_closed_at'] = now();
+        }
+
+        if (in_array($newStatus, ['draft', 'submission_open'], true)) {
+            $updates['voting_opened_at'] = null;
+            $updates['voting_closed_at'] = null;
+        }
+
+        $event->update($updates);
+
+        return Redirect::back()->with('success', "Status diubah ke {$newStatus}.");
     }
 }

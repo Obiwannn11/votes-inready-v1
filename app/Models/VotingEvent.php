@@ -12,6 +12,8 @@ class VotingEvent extends Model
         'description',
         'status',
         'submission_deadline',
+        'voting_opened_at',
+        'voting_closed_at',
     ];
 
     protected static function boot()
@@ -29,6 +31,8 @@ class VotingEvent extends Model
     {
         return [
             'submission_deadline' => 'datetime',
+            'voting_opened_at' => 'datetime',
+            'voting_closed_at' => 'datetime',
         ];
     }
 
@@ -78,5 +82,18 @@ class VotingEvent extends Model
     public function isPublishedForGallery(): bool
     {
         return in_array($this->status, ['submission_open', 'voting_open', 'closed', 'archived'], true);
+    }
+
+    public function canTransitionTo(string $newStatus): bool
+    {
+        $allowed = [
+            'draft' => ['submission_open'],
+            'submission_open' => ['draft', 'voting_open'],
+            'voting_open' => ['closed'],
+            'closed' => ['archived'],
+            'archived' => [],
+        ];
+
+        return in_array($newStatus, $allowed[$this->status] ?? [], true);
     }
 }

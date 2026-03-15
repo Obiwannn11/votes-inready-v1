@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('status', ['draft', 'submission_open', 'voting_open', 'closed', 'archived'])->default('draft');
             $table->timestamp('submission_deadline')->nullable();
+            $table->timestamp('voting_opened_at')->nullable();
+            $table->timestamp('voting_closed_at')->nullable();
             $table->timestamps();
         });
     }
