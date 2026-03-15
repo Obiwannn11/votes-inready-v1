@@ -1,8 +1,8 @@
-name: Deploy to aaPanel
+name: Deploy Votes InReady V1
 
 on:
   push:
-    branches: [ "main" ] # Sesuaikan dengan branch utama Anda
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -12,42 +12,37 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }} # bukan root
+          username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            # Masuk ke folder project (Sesuaikan dengan path project Anda di aaPanel)
+            # 1. Masuk folder project
             cd ${{ secrets.PATH_VPS }}
 
-            # Tarik kodingan terbaru dari GitHub
+            # 2. Ambil alih ownership sementara (agar bisa git, npm, composer)
+            sudo chown -R $USER:$USER .
+
+            # 3. Update kodingan
             git fetch --all
             git reset --hard origin/main
 
-            # Install dependency Node.js (Library frontend)
-            npm install # atau npm ci jika menggunakan package-lock.json
+            # 4. Install & build frontend (Vite + Tailwind)
+            /usr/bin/npm install
+            /usr/bin/npm run build
 
-            # Compile Vite (Build assets CSS & JS untuk produksi)
-            npm run build
+            # 5. Install dependency PHP
+            /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-            # Install dependency PHP tanpa interaksi dan optimasi autoloader
-            composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            # 6. Laravel commands
+            /usr/bin/php artisan migrate --force
+            /usr/bin/php artisan storage:link
+            /usr/bin/php artisan optimize:clear
+            /usr/bin/php artisan config:cache
+            /usr/bin/php artisan route:cache
+            /usr/bin/php artisan view:cache
 
-            # Jalankan migrasi database
-            # CATATAN: Gunakan migrate --force untuk produksi, HINDARI migrate:fresh --seed di production agar data tidak hilang!
-            # php artisan migrate --force
-            php artisan migrate:fresh --force --seed
+            # 7. Kembalikan ownership ke www (wajib — agar Nginx/PHP-FPM bisa serve)
+            sudo chown -R www:www .
+            sudo chmod -R 775 storage bootstrap/cache
 
-            # Buat symlink untuk storage jika belum ada
-            php artisan storage:link
-
-            # Bersihkan dan cache ulang config, route, view untuk optimasi
-            php artisan optimize:clear
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-
-            # PENTING: Fix Permission aaPanel (agar tidak error 500)
-            chown -R www:www storage bootstrap/cache
-            chmod -R 775 storage bootstrap/cache
-            
             echo "Deployment Berhasil!"
