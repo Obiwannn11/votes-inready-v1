@@ -27,18 +27,35 @@
     @stack('styles')
 </head>
 
-<body class="bg-canvas text-ink min-h-screen font-body antialiased">
-    <nav class="bg-surface border-b-4 border-ink shadow-sm">
+<body class="bg-canvas text-ink min-h-screen flex flex-col font-body antialiased">
+    <nav class="bg-surface border-b-4 border-ink shadow-sm relative z-50">
         <div class="max-w-[1224px] mx-auto px-4 py-3 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 sm:gap-8 min-w-max">
                 <a href="/"
-                    class="font-display font-black text-lg sm:text-xl uppercase tracking-widest shrink-0 text-ink hover:underline">
+                    class="font-display font-black text-lg sm:text-xl uppercase tracking-widest shrink-0 text-ink">
                     Inready VOTES
                 </a>
-                <a href="{{ route('voting.landing') }}" class="hidden sm:block font-body text-sm font-semibold hover:underline border-b-2 border-transparent hover:border-ink">Event</a>
+                <div class="hidden sm:flex items-center gap-5">
+                    <a href="/"
+                        class="font-body text-sm font-bold {{ request()->is('/') ? 'border-b-2 border-ink' : 'border-b-2 border-transparent hover:border-ink' }} transition-colors">Home</a>
+                    <a href="{{ route('voting.landing') }}"
+                        class="font-body text-sm font-bold {{ request()->is('vote') || (request()->is('vote/event*') && !request()->is('vote/submit*')) ? 'border-b-2 border-ink' : 'border-b-2 border-transparent hover:border-ink' }} transition-colors">Voting</a>
+                    @auth
+                        <a href="{{ route('voting.submit.index') }}"
+                            class="font-body text-sm font-bold {{ request()->is('submit*') ? 'border-b-2 border-ink' : 'border-b-2 border-transparent hover:border-ink' }} transition-colors">Submission</a>
+                    @endauth
+                </div>
             </div>
-            <div class="flex items-center justify-end gap-2 sm:gap-3 min-w-0">
-                <a href="{{ route('voting.landing') }}" class="sm:hidden font-body text-xs font-semibold mr-2 underline">Event</a>
+            <div class="flex items-center justify-end gap-2 sm:gap-4 min-w-0">
+                <div class="sm:hidden flex items-center gap-3 mr-1">
+                    <a href="/"
+                        class="font-body text-xs font-bold {{ request()->is('/') ? 'underline underline-offset-4' : 'hover:underline hover:underline-offset-4' }}">Home</a>
+                    <a href="{{ route('voting.landing') }}"
+                        class="font-body text-xs font-bold {{ request()->is('vote') || (request()->is('vote/event*') && !request()->is('vote/submit*')) ? 'underline underline-offset-4' : 'hover:underline hover:underline-offset-4' }}">Voting</a>
+                    @auth
+                        <a href="{{ route('voting.submit.index') }}" class="font-body text-xs font-bold {{ request()->is('submit*') ? 'underline underline-offset-4' : 'hover:underline hover:underline-offset-4' }}">Sub</a>
+                    @endauth
+                </div>
                 @auth
                     @php
                         $currentSlug = \Illuminate\Support\Facades\Request::route('slug');
@@ -140,9 +157,23 @@
         @endif
     </div>
 
-    <main class="max-w-[1224px] mx-auto px-4 py-8 sm:py-12">
+    <main class="max-w-[1224px] mx-auto px-4 py-8 sm:py-12 flex-1 w-full">
         @yield('content')
     </main>
+
+    <!-- Global Footer based on Design System -->
+    <footer class="bg-ink text-surface py-12 px-6 text-center border-t-4 border-primary-yellow mt-auto">
+        <div class="flex items-center justify-center gap-2 mb-4">
+            <div class="w-3 h-3 rounded-full bg-primary-yellow"></div>
+            <div class="w-3 h-3 bg-surface"></div>
+            <div class="w-3 h-3 bg-primary-red" style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"></div>
+        </div>
+        <div class="font-display font-black text-xl uppercase tracking-tight mb-2">InReady VOTES</div>
+        <div class="font-body text-sm text-surface/80">Voting On Talent Excellence & Showcase</div>
+        <div class="font-body text-xs text-surface/60 mt-2">Study Club IT - Inready Workgroup</div>
+        <div class="font-body text-xs text-surface/50 mt-4">&copy; {{ date('Y') }} Inready Workgroup. All Rights
+            Reserved.</div>
+    </footer>
 
     @stack('scripts')
 </body>
