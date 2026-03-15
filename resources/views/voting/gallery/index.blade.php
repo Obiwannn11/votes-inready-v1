@@ -3,48 +3,52 @@
 @section('title', $event->title . ' — Gallery')
 
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{ $event->title }}</h1>
+    <div class="mb-10">
+        <h1 class="text-4xl font-display font-black uppercase tracking-tight text-ink mb-2">{{ $event->title }}</h1>
         @if ($event->description)
-            <p class="text-gray-500 mt-1">{{ $event->description }}</p>
+            <p class="font-body text-grey font-medium max-w-3xl">{{ $event->description }}</p>
         @endif
 
-        @if ($event->isClosed())
-            <a href="{{ route('voting.results', $event->slug) }}"
-                class="inline-block mt-3 text-sm bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                Lihat Hasil Voting
-            </a>
-        @endif
+        <div class="mt-4 flex flex-wrap gap-3 items-center">
+            @if ($event->isClosed())
+                <x-button variant="primary" href="{{ route('voting.results', $event->slug) }}">
+                    Lihat Hasil Voting
+                </x-button>
+            @endif
 
-        @if ($event->isVotingOpen())
-            <span class="inline-block mt-2 text-xs font-medium px-3 py-1 rounded bg-green-100 text-green-700">
-                Voting Dibuka
-            </span>
-            @auth
-                <span class="text-xs text-gray-500 ml-2">Vote terpakai: {{ $userVoteCount }}/3</span>
-            @endauth
-        @elseif($event->isClosed())
-            <span class="inline-block mt-2 text-xs font-medium px-3 py-1 rounded bg-gray-100 text-gray-600">
-                Voting Ditutup — Hasil Final
-            </span>
-        @endif
+            @if ($event->isVotingOpen())
+                <span
+                    class="inline-block text-xs font-display font-bold uppercase tracking-widest px-3 py-1 border-2 border-ink bg-success text-surface shadow-[2px_2px_0px_0px_var(--color-ink)]">
+                    Voting Dibuka
+                </span>
+                @auth
+                    <span class="text-xs font-display font-bold uppercase tracking-widest text-grey ml-2">Vote terpakai:
+                        {{ $userVoteCount }}/3</span>
+                @endauth
+            @elseif($event->isClosed())
+                <span
+                    class="inline-block text-xs font-display font-bold uppercase tracking-widest px-3 py-1 border-2 border-ink bg-muted text-ink shadow-[2px_2px_0px_0px_var(--color-ink)]">
+                    Voting Ditutup — Hasil Final
+                </span>
+            @endif
+        </div>
     </div>
 
-    <div class="flex gap-2 mb-6 flex-wrap">
+    <div class="flex gap-4 mb-8 flex-wrap border-b-4 border-ink pb-4">
         <a href="{{ route('voting.gallery', $event->slug) }}"
-            class="px-4 py-2 rounded text-sm transition {{ !$concentration ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+            class="font-display font-bold uppercase tracking-widest px-4 py-2 border-2 border-ink transition hover:bg-ink hover:text-surface shadow-[3px_3px_0px_0px_var(--color-ink)] {{ !$concentration ? 'bg-ink text-surface' : 'bg-surface text-ink' }}">
             Semua
         </a>
 
         @foreach (['website' => 'Website', 'design' => 'Desain', 'mobile' => 'Mobile'] as $key => $label)
             <a href="{{ route('voting.gallery', [$event->slug, 'c' => $key]) }}"
-                class="px-4 py-2 rounded text-sm transition {{ $concentration === $key ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                class="font-display font-bold uppercase tracking-widest px-4 py-2 border-2 border-ink transition hover:bg-ink hover:text-surface shadow-[3px_3px_0px_0px_var(--color-ink)] {{ $concentration === $key ? 'bg-ink text-surface' : 'bg-surface text-ink' }}">
                 {{ $label }}
             </a>
         @endforeach
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         @forelse($submissions as $sub)
             @php
                 $thumbnailUrl = $sub->thumbnail_path
@@ -54,42 +58,52 @@
                     : asset('images/placeholder-ss.png');
             @endphp
 
-            <a href="{{ route('voting.detail', [$event->slug, $sub->id]) }}"
-                class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden group">
-                <div class="relative">
-                    <img src="{{ $thumbnailUrl }}" alt="{{ $sub->title }}"
-                        class="w-full h-48 object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+            <x-card padding="p-0" class="group block cursor-pointer">
+                <a href="{{ route('voting.detail', [$event->slug, $sub->id]) }}" class="block">
+                    <div class="relative border-b-4 border-ink">
+                        <img src="{{ $thumbnailUrl }}" alt="{{ $sub->title }}"
+                            class="w-full h-56 object-cover object-top grayscale-[20%] group-hover:grayscale-0 transition-all duration-300"
+                            loading="lazy">
 
-                    <span
-                        class="absolute top-2 left-2 text-xs font-medium px-2 py-1 rounded bg-white/90 text-gray-700 capitalize">
-                        {{ $sub->concentration }}
-                    </span>
+                        <x-badge type="{{ $sub->concentration }}" class="absolute top-4 left-4">
+                            {{ $sub->concentration }}
+                        </x-badge>
 
-                    @if (isset($userVotes[$sub->concentration]) && (int) $userVotes[$sub->concentration] === $sub->id)
-                        <span class="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">
-                            Voted ✓
-                        </span>
-                    @endif
-                </div>
+                        @if (isset($userVotes[$sub->concentration]) && (int) $userVotes[$sub->concentration] === $sub->id)
+                            <span
+                                class="absolute top-4 right-4 text-xs font-display font-bold uppercase tracking-widest px-3 py-1 border-2 border-ink bg-success text-surface shadow-[2px_2px_0px_0px_var(--color-ink)]">
+                                Voted ✓
+                            </span>
+                        @endif
+                    </div>
 
-                <div class="p-4">
-                    <h3 class="font-semibold group-hover:text-blue-600 transition">{{ $sub->title }}</h3>
-                    <p class="text-sm text-gray-500 mt-1">{{ $sub->submitter?->name ?? 'Peserta' }}</p>
+                    <div class="p-5">
+                        <h3
+                            class="font-display font-bold text-xl uppercase tracking-tight group-hover:text-primary-blue transition-colors">
+                            {{ $sub->title }}</h3>
+                        <p class="text-sm font-body text-grey font-medium mt-1 uppercase tracking-wider">
+                            {{ $sub->submitter?->name ?? 'Peserta' }}</p>
 
-                    @if ($event->isClosed())
-                        <p class="text-sm font-medium text-blue-600 mt-2">
-                            {{ $voteCounts[$sub->id] ?? 0 }} vote
-                        </p>
-                    @endif
-                </div>
-            </a>
+                        @if ($event->isClosed())
+                            <div
+                                class="mt-4 inline-block px-3 py-1 bg-ink text-primary-yellow font-display font-bold text-sm tracking-widest uppercase">
+                                {{ $voteCounts[$sub->id] ?? 0 }} vote
+                            </div>
+                        @endif
+                    </div>
+                </a>
+            </x-card>
         @empty
-            <div class="col-span-full text-center text-gray-400 py-16">
-                @if ($concentration)
-                    Belum ada karya di konsentrasi ini.
-                @else
-                    Belum ada karya yang di-approve.
-                @endif
+            <div class="col-span-full">
+                <x-card border="thick" class="text-center py-16">
+                    <p class="font-display font-bold text-xl text-ink uppercase tracking-widest">
+                        @if ($concentration)
+                            Belum ada karya di konsentrasi ini.
+                        @else
+                            Belum ada karya yang di-approve.
+                        @endif
+                    </p>
+                </x-card>
             </div>
         @endforelse
     </div>

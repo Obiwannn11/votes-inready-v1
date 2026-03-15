@@ -3,51 +3,63 @@
 @section('title', 'Vote Saya')
 
 @section('content')
-    <div class="max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold mb-2">Vote Saya</h1>
-        <p class="text-gray-500 mb-6">{{ $event->title }} · {{ $votes->count() }}/3 vote terpakai</p>
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl sm:text-5xl font-display font-black uppercase tracking-tight text-ink mb-2">Vote Saya</h1>
+        <p class="font-body text-grey font-medium tracking-wide uppercase text-sm sm:text-base mb-8">{{ $event->title }} ·
+            <span class="text-primary-blue font-bold">{{ $votes->count() }}/3</span> vote terpakai</p>
 
-        @forelse($votes as $vote)
-            @php
-                $thumbnailUrl =
-                    $vote->submission && $vote->submission->thumbnail_path
-                        ? (\Illuminate\Support\Str::startsWith($vote->submission->thumbnail_path, 'images/')
-                            ? asset($vote->submission->thumbnail_path)
-                            : \Illuminate\Support\Facades\Storage::url($vote->submission->thumbnail_path))
-                        : asset('images/placeholder-ss.png');
-            @endphp
+        <div class="space-y-4">
+            @forelse($votes as $vote)
+                @php
+                    $thumbnailUrl =
+                        $vote->submission && $vote->submission->thumbnail_path
+                            ? (\Illuminate\Support\Str::startsWith($vote->submission->thumbnail_path, 'images/')
+                                ? asset($vote->submission->thumbnail_path)
+                                : \Illuminate\Support\Facades\Storage::url($vote->submission->thumbnail_path))
+                            : asset('images/placeholder-ss.png');
+                @endphp
 
-            <div class="bg-white rounded-lg shadow-sm p-4 mb-3 flex gap-4 flex-col sm:flex-row">
-                <img src="{{ $thumbnailUrl }}" class="w-16 h-16 object-cover rounded" alt="Thumbnail karya" loading="lazy">
-                <div>
-                    <a href="{{ route('voting.detail', [$event->slug, $vote->submission->id]) }}"
-                        class="font-semibold hover:text-blue-600">
-                        {{ $vote->submission->title }}
-                    </a>
-                    <p class="text-sm text-gray-500">
-                        {{ $vote->submission->submitter?->name ?? 'Peserta' }} ·
-                        <span class="font-medium">{{ $vote->concentration }}</span>
-                    </p>
-                    <p class="text-xs text-gray-400 mt-1">Divote {{ $vote->created_at->diffForHumans() }}</p>
-                </div>
-            </div>
-        @empty
-            <div class="text-center text-gray-400 py-12 bg-white rounded-lg shadow-sm">
-                Kamu belum memberikan vote.
-                <br>
-                <a href="{{ route('voting.gallery', $event->slug) }}"
-                    class="text-blue-600 hover:underline mt-2 inline-block">
-                    Browse gallery →
-                </a>
-            </div>
-        @endforelse
+                <x-card padding="p-0" border="thick"
+                    class="flex flex-col sm:flex-row shadow-[4px_4px_0px_0px_var(--color-ink)]">
+                    <div class="sm:w-48 h-48 sm:h-auto shrink-0 border-b-4 sm:border-b-0 sm:border-r-4 border-ink">
+                        <img src="{{ $thumbnailUrl }}" class="w-full h-full object-cover grayscale-[20%]"
+                            alt="Thumbnail karya" loading="lazy">
+                    </div>
+                    <div class="p-6 flex flex-col justify-center flex-1">
+                        <a href="{{ route('voting.detail', [$event->slug, $vote->submission->id]) }}"
+                            class="font-display font-bold text-2xl uppercase tracking-tight text-ink hover:text-primary-blue transition-colors mb-2">
+                            {{ $vote->submission->title }}
+                        </a>
+                        <p class="font-body text-sm font-medium text-grey uppercase tracking-widest mb-4">
+                            {{ $vote->submission->submitter?->name ?? 'Peserta' }}
+                        </p>
+                        <div class="flex items-center justify-between mt-auto">
+                            <x-badge type="{{ $vote->concentration }}">
+                                {{ $vote->concentration }}
+                            </x-badge>
+                            <p class="text-xs font-body font-bold text-muted-foreground uppercase">Divote
+                                {{ $vote->created_at->diffForHumans() }}</p>
+                        </div>
+                    </div>
+                </x-card>
+            @empty
+                <x-card padding="p-12" border="thick" class="text-center shadow-[6px_6px_0px_0px_var(--color-ink)]">
+                    <p class="font-display font-black text-xl text-ink uppercase tracking-widest mb-6">Kamu belum memberikan
+                        vote.</p>
+                    <x-button variant="primary" href="{{ route('voting.gallery', $event->slug) }}">
+                        Browse gallery →
+                    </x-button>
+                </x-card>
+            @endforelse
+        </div>
 
         @if ($votes->count() < 3)
-            <p class="text-center mt-4">
-                <a href="{{ route('voting.gallery', $event->slug) }}" class="text-sm text-blue-600 hover:underline">
+            <div class="text-center mt-12">
+                <a href="{{ route('voting.gallery', $event->slug) }}"
+                    class="font-display font-bold text-sm bg-ink text-surface px-6 py-3 uppercase tracking-widest hover:bg-primary-blue transition-colors">
                     Kamu masih punya {{ 3 - $votes->count() }} vote lagi →
                 </a>
-            </p>
+            </div>
         @endif
     </div>
 @endsection
