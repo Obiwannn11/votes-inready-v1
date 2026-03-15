@@ -15,7 +15,8 @@
 
         <div class="max-w-2xl mx-auto space-y-4">
             @forelse($events as $event)
-                <x-card accent="{{ $event->isVotingOpen() ? 'circle-success' : 'circle-muted' }}" class="text-left block hover:bg-surface cursor-pointer" hover="true">
+                <x-card accent="{{ $event->isVotingOpen() ? 'circle-success' : 'circle-muted' }}"
+                    class="text-left block hover:bg-surface cursor-pointer" hover="true">
                     <a href="{{ route('voting.gallery', $event->slug) }}" class="block">
                         <div class="flex justify-between items-start gap-3 pr-8">
                             <h2 class="font-display font-bold text-xl uppercase">{{ $event->title }}</h2>
