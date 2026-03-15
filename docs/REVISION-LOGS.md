@@ -27,6 +27,23 @@ Gunakan template di bawah ini setiap kali mencatat revisi baru. Tambahkan entri 
 
 ## 📜 Daftar Revisi
 
+### v2.0.0 - 15 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Polish & Design System Restructuring
+
+**Detail Perubahan:**
+- [Added] Konfigurasi token Theming pada `resources/css/app.css` berdasarkan "InReady Bauhaus Design System v2.0". Memasukkan custom variable warna (`--color-primary-yellow`, dll.), bayangan kontras tinggi (`--shadow-*`), dan font system (`Outfit` & `Poppins`).
+- [Added] Membuat sub-komponen Blade modular di `resources/views/components/`: `button.blade.php`, `card.blade.php`, `input.blade.php`, `label.blade.php`, `badge.blade.php`.
+- [Changed] Menyesuaikan root layout pada `resources/views/voting/layouts/app.blade.php` dan `admin.blade.php` untuk menampung import font dan mengatur grid/container menggunakan `max-w-[1224px]`.
+- [Changed] Refaktor masif UI publik agar selaras dengan pola *Neo-brutalism/Bauhaus* (bayangan tajam, warna murni blok kontras, komponen bold). Mengubah format `auth/login`, `landing.blade.php`, `gallery/index`, `gallery/show`, `vote/my-votes`, dan `results/index`.
+- [Fixed] Menyempurnakan pewarnaan teks "Total Voter / Vote" yang sebelumnya tidak nampak pada hasil di `voting/results/index.blade.php` karena isu CSS specificy inheritance.
+- [Changed] Memodifikasi dot aksen abstrak di komponen `<x-card>` (`circle`, `circle-success`, `circle-muted`) menyesuaikan status dinamis event (aktif = circle-success, tutup = circle-muted) di halaman depan.
+- [Added] Memastikan integrasi komponen visual baru tetap menjaga reaktivitas AlpineJS dan arsitektur route yang ada di fase sebelumnya.
+
+**Dampak/Catatan Khusus:**
+- Transisi desain dari utilitas biasa ke full design system "InReady Bauhaus".
+- Implementasi menggunakan flexibilitas dari standardisasi Tailwind v4 yang menyematkan utility langsung di layer theme.
+
 ### v1.0.10 - 15 Maret 2026
 **Author:** AI Assistant
 **Fase Terkait:** Fase 5 (Hasil Voting & Polish)
