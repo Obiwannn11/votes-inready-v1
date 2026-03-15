@@ -13,37 +13,66 @@
     {{-- Status controls --}}
     <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-6">
         <h2 class="font-semibold mb-3">Kontrol Status</h2>
+        @php
+            $statusOptions = [
+                'draft' => [
+                    'label' => 'Draft',
+                    'active' => 'bg-gray-800 text-white',
+                    'inactive' => 'bg-gray-200 hover:bg-gray-300',
+                ],
+                'submission_open' => [
+                    'label' => 'Buka Submission',
+                    'active' => 'bg-blue-600 text-white',
+                    'inactive' => 'bg-gray-200 hover:bg-gray-300',
+                ],
+                'voting_open' => [
+                    'label' => 'Buka Voting',
+                    'active' => 'bg-green-600 text-white',
+                    'inactive' => 'bg-gray-200 hover:bg-gray-300',
+                ],
+                'closed' => [
+                    'label' => 'Tutup Event',
+                    'active' => 'bg-red-600 text-white',
+                    'inactive' => 'bg-gray-200 hover:bg-gray-300',
+                ],
+                'archived' => [
+                    'label' => 'Arsipkan Event',
+                    'active' => 'bg-purple-700 text-white',
+                    'inactive' => 'bg-gray-200 hover:bg-gray-300',
+                ],
+            ];
+        @endphp
+
         <div class="flex flex-wrap gap-2">
-            <form method="POST" action="{{ route('voting.admin.events.changeStatus', $event) }}">
-                @csrf @method('PATCH')
-                <input type="hidden" name="status" value="draft">
-                <button type="submit"
-                    class="px-3 py-1 rounded text-sm {{ $event->status === 'draft' ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">Draft</button>
-            </form>
+            @foreach ($statusOptions as $status => $meta)
+                @php
+                    $isActive = $event->status === $status;
+                    $isEnabled = $isActive || $event->canTransitionTo($status);
+                    $buttonClass = $isActive
+                        ? $meta['active']
+                        : ($isEnabled
+                            ? $meta['inactive']
+                            : 'bg-gray-100 text-gray-400 cursor-not-allowed');
+                @endphp
 
-            <form method="POST" action="{{ route('voting.admin.events.changeStatus', $event) }}">
-                @csrf @method('PATCH')
-                <input type="hidden" name="status" value="submission_open">
-                <button type="submit"
-                    class="px-3 py-1 rounded text-sm {{ $event->status === 'submission_open' ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">Buka
-                    Submission</button>
-            </form>
+                <form method="POST" action="{{ route('voting.admin.events.changeStatus', $event) }}">
+                    @csrf @method('PATCH')
+                    <input type="hidden" name="status" value="{{ $status }}">
+                    <button type="submit" {{ $isEnabled ? '' : 'disabled' }}
+                        class="px-3 py-1 rounded text-sm {{ $buttonClass }}">
+                        {{ $meta['label'] }}
+                    </button>
+                </form>
+            @endforeach
+        </div>
 
-            <form method="POST" action="{{ route('voting.admin.events.changeStatus', $event) }}">
-                @csrf @method('PATCH')
-                <input type="hidden" name="status" value="voting_open">
-                <button type="submit"
-                    class="px-3 py-1 rounded text-sm {{ $event->status === 'voting_open' ? 'bg-green-600 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">Buka
-                    Voting</button>
-            </form>
+        <p class="text-xs text-gray-400 mt-2">Status nonaktif berarti transisi belum valid dari status saat ini.</p>
 
-            <form method="POST" action="{{ route('voting.admin.events.changeStatus', $event) }}">
-                @csrf @method('PATCH')
-                <input type="hidden" name="status" value="closed">
-                <button type="submit"
-                    class="px-3 py-1 rounded text-sm {{ $event->status === 'closed' ? 'bg-red-600 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">Tutup
-                    Event</button>
-            </form>
+        <div class="mt-4 pt-4 border-t border-gray-100 text-sm text-gray-600 space-y-1">
+            <p>Voting dibuka:
+                {{ $event->voting_opened_at ? $event->voting_opened_at->format('d M Y, H:i') . ' WITA' : '-' }}</p>
+            <p>Voting ditutup:
+                {{ $event->voting_closed_at ? $event->voting_closed_at->format('d M Y, H:i') . ' WITA' : '-' }}</p>
         </div>
     </div>
 

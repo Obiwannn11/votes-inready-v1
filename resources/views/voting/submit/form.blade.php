@@ -82,7 +82,8 @@
                 <input type="file" name="thumbnail" accept="image/jpeg,image/png,image/webp" required
                     @change="preview = URL.createObjectURL($event.target.files[0])"
                     class="w-full border rounded px-3 py-2 text-sm @error('thumbnail') border-red-500 @enderror">
-                <img x-show="preview" :src="preview" class="mt-2 max-h-48 rounded" x-cloak alt="">
+                <img x-show="preview" :src="preview" class="mt-2 max-h-48 rounded" x-cloak
+                    alt="Preview thumbnail karya">
                 @error('thumbnail')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror

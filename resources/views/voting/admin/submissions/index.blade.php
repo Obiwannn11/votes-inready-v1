@@ -20,21 +20,22 @@
     </div>
 
     @forelse($submissions as $sub)
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-3 flex gap-4">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-3 flex gap-4 flex-col sm:flex-row">
             @if ($sub->thumbnail_path)
                 @php
                     $thumbnailUrl = \Illuminate\Support\Str::startsWith($sub->thumbnail_path, 'images/')
                         ? asset($sub->thumbnail_path)
                         : \Illuminate\Support\Facades\Storage::url($sub->thumbnail_path);
                 @endphp
-                <img src="{{ $thumbnailUrl }}" class="w-20 h-20 object-cover rounded bg-gray-100" alt="">
+                <img src="{{ $thumbnailUrl }}" class="w-20 h-20 object-cover rounded bg-gray-100"
+                    alt="Thumbnail karya {{ $sub->title }}" loading="lazy">
             @else
                 <div
                     class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs text-center">
                     No Img</div>
             @endif
             <div class="flex-1">
-                <div class="flex justify-between">
+                <div class="flex flex-col sm:flex-row sm:justify-between gap-3">
                     <div>
                         <a href="{{ route('voting.admin.submissions.show', $sub) }}"
                             class="font-bold text-lg hover:text-blue-600">{{ $sub->title }}</a>

@@ -23,7 +23,8 @@
                     ? asset($submission->thumbnail_path)
                     : \Illuminate\Support\Facades\Storage::url($submission->thumbnail_path);
             @endphp
-            <img src="{{ $thumbnailUrl }}" class="w-full h-64 object-cover rounded mb-6 bg-gray-100">
+            <img src="{{ $thumbnailUrl }}" class="w-full h-64 object-cover rounded mb-6 bg-gray-100"
+                alt="Thumbnail karya {{ $submission->title }}" loading="lazy">
         @endif
 
         <div class="mb-6">
@@ -33,7 +34,7 @@
 
         <div class="grid grid-cols-2 gap-4 mb-8">
             @if ($submission->demo_url)
-                <a href="{{ $submission->demo_url }}" target="_blank"
+                <a href="{{ $submission->demo_url }}" target="_blank" rel="noopener noreferrer"
                     class="block p-4 border rounded text-center hover:bg-gray-50">
                     <span class="block font-bold text-blue-600">Demo URL</span>
                     <span class="text-sm text-gray-500 truncate">{{ $submission->demo_url }}</span>
@@ -41,7 +42,7 @@
             @endif
 
             @if ($submission->github_url)
-                <a href="{{ $submission->github_url }}" target="_blank"
+                <a href="{{ $submission->github_url }}" target="_blank" rel="noopener noreferrer"
                     class="block p-4 border rounded text-center hover:bg-gray-50">
                     <span class="block font-bold text-gray-800">GitHub</span>
                     <span class="text-sm text-gray-500 truncate">{{ $submission->github_url }}</span>
@@ -59,7 +60,8 @@
                                 ? asset($ss->image_path)
                                 : \Illuminate\Support\Facades\Storage::url($ss->image_path);
                         @endphp
-                        <img src="{{ $screenshotUrl }}" class="w-full h-32 object-cover rounded bg-gray-100">
+                        <img src="{{ $screenshotUrl }}" class="w-full h-32 object-cover rounded bg-gray-100"
+                            alt="Screenshot karya {{ $submission->title }}" loading="lazy">
                     @endforeach
                 </div>
             </div>

@@ -17,8 +17,8 @@
                         : asset('images/placeholder-ss.png');
             @endphp
 
-            <div class="bg-white rounded-lg shadow-sm p-4 mb-3 flex gap-4">
-                <img src="{{ $thumbnailUrl }}" class="w-16 h-16 object-cover rounded" alt="Thumbnail karya">
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-3 flex gap-4 flex-col sm:flex-row">
+                <img src="{{ $thumbnailUrl }}" class="w-16 h-16 object-cover rounded" alt="Thumbnail karya" loading="lazy">
                 <div>
                     <a href="{{ route('voting.detail', [$event->slug, $vote->submission->id]) }}"
                         class="font-semibold hover:text-blue-600">
