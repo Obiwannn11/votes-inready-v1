@@ -68,11 +68,12 @@ class VoteMechanismTest extends TestCase
     public function test_rejects_second_vote_in_the_same_concentration(): void
     {
         $voter = $this->createActiveMember();
-        $submitter = $this->createActiveMember();
+        $firstSubmitter = $this->createActiveMember();
+        $secondSubmitter = $this->createActiveMember();
         $event = $this->createVotingEvent();
 
-        $firstSubmission = $this->createApprovedSubmission($event, $submitter, 'website', 'Karya Website A');
-        $secondSubmission = $this->createApprovedSubmission($event, $submitter, 'website', 'Karya Website B');
+        $firstSubmission = $this->createApprovedSubmission($event, $firstSubmitter, 'website', 'Karya Website A');
+        $secondSubmission = $this->createApprovedSubmission($event, $secondSubmitter, 'website', 'Karya Website B');
 
         $this->actingAs($voter)->post(route('voting.vote', [$event->slug, $firstSubmission->id]));
 
@@ -88,13 +89,16 @@ class VoteMechanismTest extends TestCase
     public function test_rejects_voting_when_total_vote_has_reached_three(): void
     {
         $voter = $this->createActiveMember();
-        $submitter = $this->createActiveMember();
+        $websiteSubmitter = $this->createActiveMember();
+        $designSubmitter = $this->createActiveMember();
+        $mobileSubmitter = $this->createActiveMember();
+        $extraSubmitter = $this->createActiveMember();
         $event = $this->createVotingEvent();
 
-        $websiteSubmission = $this->createApprovedSubmission($event, $submitter, 'website', 'Karya Website Max');
-        $designSubmission = $this->createApprovedSubmission($event, $submitter, 'design', 'Karya Design Max');
-        $mobileSubmission = $this->createApprovedSubmission($event, $submitter, 'mobile', 'Karya Mobile Max');
-        $extraSubmission = $this->createApprovedSubmission($event, $submitter, 'game', 'Karya Game Extra');
+        $websiteSubmission = $this->createApprovedSubmission($event, $websiteSubmitter, 'website', 'Karya Website Max');
+        $designSubmission = $this->createApprovedSubmission($event, $designSubmitter, 'design', 'Karya Design Max');
+        $mobileSubmission = $this->createApprovedSubmission($event, $mobileSubmitter, 'mobile', 'Karya Mobile Max');
+        $extraSubmission = $this->createApprovedSubmission($event, $extraSubmitter, 'game', 'Karya Game Extra');
 
         Vote::create([
             'voting_event_id' => $event->id,
@@ -178,7 +182,9 @@ class VoteMechanismTest extends TestCase
     {
         $voter = $this->createActiveMember();
         $otherVoter = $this->createActiveMember();
-        $submitter = $this->createActiveMember();
+        $mySubmissionSubmitter = $this->createActiveMember();
+        $otherSubmissionSubmitter = $this->createActiveMember();
+        $otherEventSubmissionSubmitter = $this->createActiveMember();
 
         $event = $this->createVotingEvent([
             'slug' => 'event-my-votes',
@@ -190,9 +196,9 @@ class VoteMechanismTest extends TestCase
             'title' => 'Event Other',
         ]);
 
-        $mySubmission = $this->createApprovedSubmission($event, $submitter, 'website', 'Karya Saya di Event');
-        $otherSubmissionSameEvent = $this->createApprovedSubmission($event, $submitter, 'design', 'Karya Orang Lain di Event');
-        $mySubmissionOtherEvent = $this->createApprovedSubmission($otherEvent, $submitter, 'mobile', 'Karya Saya di Event Lain');
+        $mySubmission = $this->createApprovedSubmission($event, $mySubmissionSubmitter, 'website', 'Karya Saya di Event');
+        $otherSubmissionSameEvent = $this->createApprovedSubmission($event, $otherSubmissionSubmitter, 'design', 'Karya Orang Lain di Event');
+        $mySubmissionOtherEvent = $this->createApprovedSubmission($otherEvent, $otherEventSubmissionSubmitter, 'mobile', 'Karya Saya di Event Lain');
 
         Vote::create([
             'voting_event_id' => $event->id,
@@ -242,13 +248,14 @@ class VoteMechanismTest extends TestCase
     public function test_hides_vote_button_when_user_already_voted_in_same_concentration(): void
     {
         $voter = $this->createActiveMember();
-        $submitter = $this->createActiveMember();
+        $firstSubmitter = $this->createActiveMember();
+        $secondSubmitter = $this->createActiveMember();
         $event = $this->createVotingEvent([
             'slug' => 'event-detail-locked',
         ]);
 
-        $alreadyVotedSubmission = $this->createApprovedSubmission($event, $submitter, 'website', 'Karya Sudah Divote');
-        $otherSubmissionSameConcentration = $this->createApprovedSubmission($event, $submitter, 'website', 'Karya Terkunci');
+        $alreadyVotedSubmission = $this->createApprovedSubmission($event, $firstSubmitter, 'website', 'Karya Sudah Divote');
+        $otherSubmissionSameConcentration = $this->createApprovedSubmission($event, $secondSubmitter, 'website', 'Karya Terkunci');
 
         Vote::create([
             'voting_event_id' => $event->id,
@@ -260,7 +267,7 @@ class VoteMechanismTest extends TestCase
         $response = $this->actingAs($voter)->get(route('voting.detail', [$event->slug, $otherSubmissionSameConcentration->id]));
 
         $response->assertOk();
-        $response->assertSeeText('Kamu sudah vote di konsentrasi website');
+        $response->assertSeeText('Sudah vote konsentrasi website');
         $response->assertDontSeeText('Vote Karya Ini');
     }
 

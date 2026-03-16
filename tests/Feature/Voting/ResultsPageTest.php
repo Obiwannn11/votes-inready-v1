@@ -35,11 +35,13 @@ class ResultsPageTest extends TestCase
             'voting_closed_at' => now()->subHour(),
         ]);
 
-        $submitter = $this->createMember(['name' => 'Submitter Demo']);
+        $websiteTopSubmitter = $this->createMember(['name' => 'Submitter Website Top']);
+        $websiteRunnerUpSubmitter = $this->createMember(['name' => 'Submitter Website Runner Up']);
+        $designTopSubmitter = $this->createMember(['name' => 'Submitter Design Top']);
 
-        $websiteTop = $this->createApprovedSubmission($event, $submitter, 'website', 'Website Top');
-        $websiteRunnerUp = $this->createApprovedSubmission($event, $submitter, 'website', 'Website Runner Up');
-        $designTop = $this->createApprovedSubmission($event, $submitter, 'design', 'Design Top');
+        $websiteTop = $this->createApprovedSubmission($event, $websiteTopSubmitter, 'website', 'Website Top');
+        $websiteRunnerUp = $this->createApprovedSubmission($event, $websiteRunnerUpSubmitter, 'website', 'Website Runner Up');
+        $designTop = $this->createApprovedSubmission($event, $designTopSubmitter, 'design', 'Design Top');
 
         $this->castVotes($event, $websiteTop, 'website', 4);
         $this->castVotes($event, $websiteRunnerUp, 'website', 2);
@@ -53,8 +55,8 @@ class ResultsPageTest extends TestCase
         $response->assertSeeInOrder(['Website Top', 'Website Runner Up']);
         $response->assertSeeText('Juara #1');
         $response->assertSeeText('7');
-        $response->assertSeeText('total voter');
-        $response->assertSeeText('total vote');
+        $response->assertSeeText('Total Voter');
+        $response->assertSeeText('Total Vote');
     }
 
     public function test_shows_results_button_in_gallery_when_event_closed(): void
