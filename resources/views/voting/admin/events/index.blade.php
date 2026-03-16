@@ -11,7 +11,8 @@
     </div>
 
     @forelse($events as $event)
-        <div class="bg-white rounded-lg shadow-sm p-4 mb-3 border border-gray-100">
+        <a href="{{ route('voting.admin.events.show', $event) }}"
+            class="block card bg-surface p-5 mb-4 border-2 border-ink shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer no-underline">
             <div class="flex justify-between items-start">
                 <div>
                     <a href="{{ route('voting.admin.events.show', $event) }}"
