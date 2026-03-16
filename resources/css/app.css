@@ -34,6 +34,7 @@
     --shadow-xl: 8px 8px 0px 0px var(--color-ink);
     
     --shadow-yellow: 4px 4px 0px 0px var(--color-primary-yellow);
+    --shadow-canvas: 4px 4px 0px 0px var(--color-canvas);
     --shadow-red: 4px 4px 0px 0px var(--color-primary-red);
     --shadow-blue: 4px 4px 0px 0px var(--color-primary-blue);
 }
