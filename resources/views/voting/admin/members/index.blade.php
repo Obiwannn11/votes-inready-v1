@@ -5,10 +5,10 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Data Members</h1>
         <a href="{{ route('voting.admin.members.create') }}"
-            class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">+ Tambah Member</a>
+            class="bg-primary-yellow text-black px-4 py-2 text-sm shadow-sm border border-gray-100 p-6 hover:bg-primary-yellow hover:scale-103 transition-transform duration-200 font-bold">+ Tambah Member</a>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border-2 border-black overflow-hidden">
+    <div class="bg-white  shadow-sm border-2 border-black overflow-hidden">
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 border-b-2 border-black">
                 <tr>
