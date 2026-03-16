@@ -8,22 +8,23 @@
             class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">+ Tambah Member</a>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm border-2 border-black overflow-hidden">
         <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 border-b">
+            <thead class="bg-gray-50 border-b-2 border-black">
                 <tr>
-                    <th class="px-4 py-3">Nama</th>
-                    <th class="px-4 py-3">Email</th>
-                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3 border-r-2 border-black last:border-r-0">Nama</th>
+                    <th class="px-4 py-3 border-r-2 border-black last:border-r-0">Email</th>
+                    <th class="px-4 py-3 border-r-2 border-black last:border-r-0">Status</th>
                     <th class="px-4 py-3">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($members as $member)
-                    <tr class="border-b last:border-0 hover:bg-gray-50">
-                        <td class="px-4 py-3 font-medium">{{ $member->name }}</td>
-                        <td class="px-4 py-3 text-gray-500">{{ $member->email }}</td>
-                        <td class="px-4 py-3">
+                    <tr class="border-b-2 border-black last:border-0 hover:bg-gray-50">
+                        <td class="px-4 py-3 font-medium border-r-2 border-black last:border-r-0">{{ $member->name }}</td>
+                        <td class="px-4 py-3 text-gray-500 border-r-2 border-black last:border-r-0">{{ $member->email }}
+                        </td>
+                        <td class="px-4 py-3 border-r-2 border-black last:border-r-0">
                             <span
                                 class="px-2 py-1 rounded text-xs {{ $member->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                 {{ $member->is_active ? 'Aktif' : 'Nonaktif' }}
@@ -48,4 +49,5 @@
             </tbody>
         </table>
     </div>
+
 @endsection
