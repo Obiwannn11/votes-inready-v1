@@ -1,9 +1,14 @@
 @extends('voting.layouts.admin')
 @section('title', 'Members')
+@section('admin_nav_title', 'Data Members')
+@section('admin_nav_breadcrumb')
+    <a href="{{ route('voting.admin.members.index') }}" class="hover:text-ink transition-colors">Members</a>
+    <span class="text-ink/40">&gt;</span>
+    <span class="text-ink font-medium">Semua Member</span>
+@endsection
 
 @section('content')
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold">Data Members</h1>
+    <div class="flex justify-end items-center mb-6">
         <a href="{{ route('voting.admin.members.create') }}"
             class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">+ Tambah Member</a>
     </div>

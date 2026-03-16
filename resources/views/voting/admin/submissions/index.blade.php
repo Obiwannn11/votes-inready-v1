@@ -1,56 +1,75 @@
 @extends('voting.layouts.admin')
 @section('title', 'Submissions: ' . $event->title)
+@section('admin_nav_title', 'Submissions Event')
+@section('admin_nav_breadcrumb')
+    <a href="{{ route('voting.admin.events.index') }}" class="hover:text-ink transition-colors">Events</a>
+    <span class="text-ink/40">&gt;</span>
+    <a href="{{ route('voting.admin.events.show', $event) }}" class="hover:text-ink transition-colors">{{ $event->title }}</a>
+    <span class="text-ink/40">&gt;</span>
+    <span class="text-ink font-medium">Submissions</span>
+@endsection
 
 @section('content')
-    <div class="mb-8">
-        <a href="{{ route('voting.admin.events.show', $event) }}"
-            class="inline-flex items-center gap-1 font-display font-bold text-xs uppercase tracking-widest text-ink/50 hover:text-primary-blue transition-colors mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+    <div class="mb-4">
+        <x-button variant="outline" size="sm" href="{{ route('voting.admin.events.show', $event) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
             Kembali ke Event
-        </a>
-        <h1 class="section-title mb-1">Submissions</h1>
-        <p class="section-subtitle">{{ $event->title }}</p>
+        </x-button>
     </div>
 
     {{-- Filter Tabs --}}
     <div class="flex gap-2 mb-6 flex-wrap">
         @php
-            $currentStatus = \Illuminate\Support\Facades\Request::get('status');
+            $currentStatus = request()->query('status');
+
+            if (!in_array($currentStatus, ['pending', 'approved', 'rejected'], true)) {
+                $currentStatus = 'all';
+            }
+
             $filters = [
-                null => 'Semua',
-                'pending' => 'Pending',
-                'approved' => 'Approved',
-                'rejected' => 'Rejected',
-            ];
-            $filterTypes = [
-                null => 'default',
-                'pending' => 'pending',
-                'approved' => 'approved',
-                'rejected' => 'rejected',
+                'all' => [
+                    'label' => 'Semua',
+                    'active_class' => 'bg-ink text-surface shadow-[4px_4px_0px_0px_var(--color-primary-yellow)]',
+                ],
+                'pending' => [
+                    'label' => 'Pending',
+                    'active_class' => 'bg-primary-yellow text-ink shadow-[4px_4px_0px_0px_var(--color-ink)]',
+                ],
+                'approved' => [
+                    'label' => 'Approved',
+                    'active_class' => 'bg-success text-surface shadow-[4px_4px_0px_0px_var(--color-ink)]',
+                ],
+                'rejected' => [
+                    'label' => 'Rejected',
+                    'active_class' => 'bg-primary-red text-surface shadow-[4px_4px_0px_0px_var(--color-ink)]',
+                ],
             ];
         @endphp
-        @foreach ($filters as $statusVal => $label)
+        @foreach ($filters as $statusVal => $meta)
             @php
                 $isActive = $currentStatus === $statusVal;
-                $url = $statusVal
-                    ? route('voting.admin.submissions', [$event, 'status' => $statusVal])
-                    : route('voting.admin.submissions', $event);
+                $url =
+                    $statusVal === 'all'
+                        ? route('voting.admin.submissions', $event)
+                        : route('voting.admin.submissions', [$event, 'status' => $statusVal]);
             @endphp
             <a href="{{ $url }}"
-                class="px-4 py-2 border-2 border-ink font-display font-bold text-xs uppercase tracking-wide transition-all duration-200 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none {{ $isActive ? 'bg-ink text-surface shadow-[4px_4px_0px_0px_var(--color-primary-yellow)]' : 'bg-surface text-ink shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-muted' }}">
-                {{ $label }}
+                class="px-4 py-2 border-2 border-ink font-display font-bold text-xs uppercase tracking-wide transition-all duration-200 cursor-pointer active:translate-x-[2px] active:translate-y-[2px] active:shadow-none {{ $isActive ? $meta['active_class'] : 'bg-surface text-ink shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-muted' }}">
+                {{ $meta['label'] }}
             </a>
         @endforeach
     </div>
 
     @forelse($submissions as $sub)
-        <div class="relative card bg-surface p-5 mb-4 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] flex gap-4 flex-col sm:flex-row hover:-translate-y-1 transition-transform duration-200">
+        <div
+            class="relative card bg-surface p-5 mb-4 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] flex gap-4 flex-col sm:flex-row hover:-translate-y-1 transition-transform duration-200">
             {{-- Full card clickable link --}}
-            <a href="{{ route('voting.admin.submissions.show', $sub) }}" class="absolute inset-0 z-0" aria-label="Lihat detail {{ $sub->title }}"></a>
+            <a href="{{ route('voting.admin.submissions.show', $sub) }}" class="absolute inset-0 z-0"
+                aria-label="Lihat detail {{ $sub->title }}"></a>
 
             @if ($sub->thumbnail_path)
                 @php
@@ -62,7 +81,8 @@
                     class="w-20 h-20 object-cover border-2 border-ink shadow-[2px_2px_0px_0px_var(--color-ink)] bg-canvas flex-shrink-0 relative z-[1] pointer-events-none"
                     alt="Thumbnail karya {{ $sub->title }}" loading="lazy">
             @else
-                <div class="w-20 h-20 bg-muted border-2 border-ink flex items-center justify-center flex-shrink-0 relative z-[1] pointer-events-none">
+                <div
+                    class="w-20 h-20 bg-muted border-2 border-ink flex items-center justify-center flex-shrink-0 relative z-[1] pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-ink/30" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
                         <rect x="3" y="3" width="18" height="18" rx="0"></rect>
