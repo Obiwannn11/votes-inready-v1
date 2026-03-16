@@ -204,11 +204,11 @@
 
     <!-- Global Footer based on Design System -->
     <footer class="bg-ink text-surface py-12 px-6 text-center border-t-4 border-primary-yellow mt-auto">
-        <div class="flex items-center justify-center gap-2 mb-4">
+        {{-- <div class="flex items-center justify-center gap-2 mb-4">
             <div class="w-3 h-3 rounded-full bg-primary-yellow"></div>
             <div class="w-3 h-3 bg-surface"></div>
             <div class="w-3 h-3 bg-primary-red" style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"></div>
-        </div>
+        </div> --}}
         <div class="font-display font-black text-xl uppercase tracking-tight mb-2">InReady VOTES</div>
         <div class="font-body text-sm text-surface/80">Voting On Talent Excellence & Showcase</div>
         <div class="font-body text-xs text-surface/60 mt-2">Study Club IT - Inready Workgroup</div>
