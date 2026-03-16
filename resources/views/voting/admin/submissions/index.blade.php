@@ -48,7 +48,10 @@
     </div>
 
     @forelse($submissions as $sub)
-        <div class="card bg-surface p-5 mb-4 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] flex gap-4 flex-col sm:flex-row">
+        <div class="relative card bg-surface p-5 mb-4 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] flex gap-4 flex-col sm:flex-row hover:-translate-y-1 transition-transform duration-200">
+            {{-- Full card clickable link --}}
+            <a href="{{ route('voting.admin.submissions.show', $sub) }}" class="absolute inset-0 z-0" aria-label="Lihat detail {{ $sub->title }}"></a>
+
             @if ($sub->thumbnail_path)
                 @php
                     $thumbnailUrl = \Illuminate\Support\Str::startsWith($sub->thumbnail_path, 'images/')
@@ -56,10 +59,10 @@
                         : \Illuminate\Support\Facades\Storage::url($sub->thumbnail_path);
                 @endphp
                 <img src="{{ $thumbnailUrl }}"
-                    class="w-20 h-20 object-cover border-2 border-ink shadow-[2px_2px_0px_0px_var(--color-ink)] bg-canvas flex-shrink-0"
+                    class="w-20 h-20 object-cover border-2 border-ink shadow-[2px_2px_0px_0px_var(--color-ink)] bg-canvas flex-shrink-0 relative z-[1] pointer-events-none"
                     alt="Thumbnail karya {{ $sub->title }}" loading="lazy">
             @else
-                <div class="w-20 h-20 bg-muted border-2 border-ink flex items-center justify-center flex-shrink-0">
+                <div class="w-20 h-20 bg-muted border-2 border-ink flex items-center justify-center flex-shrink-0 relative z-[1] pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-ink/30" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
                         <rect x="3" y="3" width="18" height="18" rx="0"></rect>
@@ -69,13 +72,12 @@
                 </div>
             @endif
 
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 relative z-[1] pointer-events-none">
                 <div class="flex flex-col sm:flex-row sm:justify-between gap-3">
                     <div>
-                        <a href="{{ route('voting.admin.submissions.show', $sub) }}"
-                            class="font-display font-black text-lg uppercase tracking-tight text-ink hover:text-primary-blue transition-colors">
+                        <span class="font-display font-black text-lg uppercase tracking-tight text-ink">
                             {{ $sub->title }}
-                        </a>
+                        </span>
                         <p class="font-body text-sm text-ink/60 mt-1">
                             Oleh: <strong class="text-ink">{{ $sub->submitter->name ?? 'Unknown' }}</strong>
                             <span class="text-ink/40 mx-1">|</span>
@@ -88,7 +90,7 @@
                 </div>
 
                 @if ($sub->status === 'pending')
-                    <div class="mt-3 flex gap-2">
+                    <div class="mt-3 flex gap-2 pointer-events-auto">
                         <form method="POST" action="{{ route('voting.admin.submissions.review', $sub) }}">
                             @csrf @method('PATCH')
                             <input type="hidden" name="status" value="approved">
