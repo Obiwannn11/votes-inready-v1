@@ -34,8 +34,16 @@ class SubmissionController extends Controller
     public function review(ReviewSubmissionRequest $request, Submission $submission)
     {
         $data = $request->validated();
-        
-        $submission->update(['status' => $data['status']]);
+
+        $payload = ['status' => $data['status']];
+
+        if ($data['status'] === 'rejected') {
+            $payload['admin_notes'] = $data['admin_notes'];
+        } else {
+            $payload['admin_notes'] = null;
+        }
+
+        $submission->update($payload);
 
         $label = $data['status'] === 'approved' ? 'disetujui' : 'ditolak';
 
