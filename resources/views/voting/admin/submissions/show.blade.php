@@ -67,19 +67,43 @@
             </div>
         @endif
 
-        <div class="border-t pt-6 flex gap-3">
-            <form method="POST" action="{{ route('voting.admin.submissions.review', $submission) }}">
+        @if ($submission->admin_notes)
+            <div class="mb-6 rounded border border-gray-200 bg-gray-50 p-4">
+                <h3 class="font-bold text-sm uppercase tracking-wide text-gray-700 mb-1">Catatan Admin Saat Ini</h3>
+                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $submission->admin_notes }}</p>
+            </div>
+        @endif
+
+        <div class="border-t pt-6 grid gap-4 md:grid-cols-2">
+            <form method="POST" action="{{ route('voting.admin.submissions.review', $submission) }}"
+                class="border rounded p-4">
                 @csrf @method('PATCH')
                 <input type="hidden" name="status" value="approved">
-                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Approve
-                    Submission</button>
+
+                <h3 class="font-semibold mb-2">Approve Submission</h3>
+                <p class="text-sm text-gray-500 mb-4">Status akan menjadi approved dan user tidak bisa mengubah karya lagi.</p>
+
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                    Approve Submission
+                </button>
             </form>
 
-            <form method="POST" action="{{ route('voting.admin.submissions.review', $submission) }}">
+            <form method="POST" action="{{ route('voting.admin.submissions.review', $submission) }}"
+                class="border rounded p-4">
                 @csrf @method('PATCH')
                 <input type="hidden" name="status" value="rejected">
-                <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">Reject
-                    Submission</button>
+
+                <h3 class="font-semibold mb-2">Reject Submission</h3>
+                <label for="admin_notes" class="block text-sm font-medium text-gray-700 mb-1">Alasan Reject</label>
+                <textarea id="admin_notes" name="admin_notes" rows="4" required
+                    class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-red-200">{{ old('admin_notes', $submission->admin_notes) }}</textarea>
+                @error('admin_notes')
+                    <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                @enderror
+
+                <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 mt-3">
+                    Reject Submission
+                </button>
             </form>
         </div>
     </div>

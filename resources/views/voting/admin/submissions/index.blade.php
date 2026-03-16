@@ -58,12 +58,10 @@
                             <button type="submit"
                                 class="text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Approve</button>
                         </form>
-                        <form method="POST" action="{{ route('voting.admin.submissions.review', $sub) }}">
-                            @csrf @method('PATCH')
-                            <input type="hidden" name="status" value="rejected">
-                            <button type="submit"
-                                class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Reject</button>
-                        </form>
+                        <a href="{{ route('voting.admin.submissions.show', $sub) }}"
+                            class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 inline-flex items-center">
+                            Reject (Isi Alasan)
+                        </a>
                     </div>
                 @endif
             </div>
