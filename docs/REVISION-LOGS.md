@@ -27,6 +27,23 @@ Gunakan template di bawah ini setiap kali mencatat revisi baru. Tambahkan entri 
 
 ## 📜 Daftar Revisi
 
+### v2.3.0 - 16 Maret 2026
+**Author:** AI Assistant
+**Fase Terkait:** Fase 2 (Submit Karya) & Fase 1 (Admin Review)
+
+**Detail Perubahan:**
+- [Changed] Mengubah alur submit karya di `app/Http/Controllers/Voting/SubmitKaryaController.php` menjadi *single submission flow* per event: user hanya bisa membuat 1 submission, dan hanya bisa edit/kirim ulang saat status `rejected`.
+- [Changed] Menambahkan proteksi database pada `database/migrations/2026_03_13_135552_create_submissions_table.php` dengan unique key `voting_event_id + submitter_id` untuk mencegah upload ganda lintas concentration (website/design/mobile) dalam event yang sama.
+- [Changed] Memperbarui validasi `app/Http/Requests/Voting/SubmitKaryaRequest.php` agar thumbnail wajib saat submit pertama, namun opsional saat edit karya yang `rejected`.
+- [Changed] Menyelaraskan UI member di `resources/views/voting/submit/index.blade.php`, `form.blade.php`, dan `status.blade.php`: tombol submit baru tidak muncul untuk status `pending/approved`, mode edit hanya untuk `rejected`, tampil alasan reject admin, dan tampil pesan selamat saat karya `approved`.
+- [Changed] Memperbarui review admin di `app/Http/Requests/Voting/Admin/ReviewSubmissionRequest.php`, `app/Http/Controllers/Voting/Admin/SubmissionController.php`, `resources/views/voting/admin/submissions/show.blade.php`, dan `index.blade.php` agar aksi reject wajib menyertakan alasan (`admin_notes`).
+- [Changed] Menyesuaikan idempotensi seeder pada `database/seeders/VotingSeeder.php` agar `updateOrCreate` submission mengikuti unique key baru (`event + submitter`).
+- [Added] Menambah dan menyesuaikan test pada `tests/Feature/Voting/SubmitKaryaTest.php`, `tests/Feature/Voting/AdminSubmissionReviewTest.php`, `tests/Feature/Voting/VoteMechanismTest.php`, dan `tests/Feature/Voting/ResultsPageTest.php` untuk meng-cover aturan baru.
+
+**Dampak/Catatan Khusus:**
+- Karena ada perubahan constraint migration submissions, environment development disarankan menjalankan `php artisan migrate:fresh --seed`.
+- Validasi regresi yang sudah diverifikasi: `php artisan test tests/Feature/Voting/SubmitKaryaTest.php tests/Feature/Voting/AdminSubmissionReviewTest.php tests/Feature/Voting/VoteMechanismTest.php tests/Feature/Voting/ResultsPageTest.php` (30 passed).
+
 ### v2.2.0 - 16 Maret 2026
 **Author:** AI Assistant
 **Fase Terkait:** Fase 2 & Polish Design System
