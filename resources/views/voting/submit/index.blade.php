@@ -28,6 +28,11 @@
         @else
             <div class="grid-2">
                 @foreach ($events as $event)
+                    @php
+                        $memberSubmission = $event->submissions->first();
+                        $canOpenForm = !$memberSubmission || $memberSubmission->status === 'rejected';
+                    @endphp
+
                     <div class="card bg-surface p-6 flex flex-col items-start relative h-full">
                         <div class="card-accent circle bg-success"></div>
                         <div class="font-display text-[10px] font-bold tracking-widest text-success uppercase mb-2">●
@@ -36,11 +41,20 @@
                         <p class="card-body text-sm mb-6 flex-1 line-clamp-3">Pendaftaran karya untuk event
                             {{ $event->title }} telah dibuka. Pastikan karya Anda sesuai dengan ketentuan yang berlaku.</p>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full mt-auto">
-                            <x-button href="{{ route('voting.submit.form', $event) }}" variant="primary"
-                                class="w-full justify-center">
-                                Submit Karya
-                            </x-button>
+                        @if ($memberSubmission)
+                            <p class="font-body text-xs mb-3 text-ink/70">
+                                Status submission Anda:
+                                <strong class="uppercase">{{ $memberSubmission->status }}</strong>
+                            </p>
+                        @endif
+
+                        <div class="grid grid-cols-1 {{ $canOpenForm ? 'sm:grid-cols-2' : '' }} gap-3 w-full mt-auto">
+                            @if ($canOpenForm)
+                                <x-button href="{{ route('voting.submit.form', $event) }}" variant="primary"
+                                    class="w-full justify-center">
+                                    {{ $memberSubmission ? 'Edit Karya Rejected' : 'Submit Karya' }}
+                                </x-button>
+                            @endif
                             <x-button href="{{ route('voting.submit.status', $event) }}" variant="outline"
                                 class="w-full justify-center">
                                 Status Saya

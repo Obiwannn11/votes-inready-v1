@@ -1,12 +1,38 @@
 @extends('voting.layouts.app')
 @section('title', 'Submit Karya — ' . $event->title)
 
+@php
+    $isResubmission = isset($submission) && $submission !== null;
+    $thumbnailPreviewUrl = null;
+
+    if ($isResubmission && $submission->thumbnail_path) {
+        $thumbnailPreviewUrl = \Illuminate\Support\Str::startsWith($submission->thumbnail_path, 'images/')
+            ? asset($submission->thumbnail_path)
+            : \Illuminate\Support\Facades\Storage::url($submission->thumbnail_path);
+    }
+@endphp
+
 @section('content')
     <div class="max-w-2xl mx-auto">
         <div class="mb-8">
-            <h1 class="section-title mb-2">Submit Karya</h1>
+            <h1 class="section-title mb-2">{{ $isResubmission ? 'Edit & Kirim Ulang Karya' : 'Submit Karya' }}</h1>
             <p class="section-subtitle">{{ $event->title }}</p>
         </div>
+
+        @if ($isResubmission)
+            <div class="card bg-primary-red/10 border-primary-red p-4 mb-6">
+                <p class="font-body text-sm font-bold text-ink mb-1">Submission Anda sebelumnya ditolak admin.</p>
+                <p class="font-body text-sm text-ink/80">
+                    Silakan perbaiki karya lalu kirim ulang untuk review ulang.
+                </p>
+                @if ($submission->admin_notes)
+                    <div class="mt-3 p-3 border-2 border-ink bg-surface text-sm text-ink">
+                        <strong class="block mb-1">Alasan Rejected dari Admin:</strong>
+                        {{ $submission->admin_notes }}
+                    </div>
+                @endif
+            </div>
+        @endif
 
         @if ($event->submission_deadline)
             <div class="card bg-primary-yellow/20 border-primary-yellow p-4 mb-6">
@@ -20,7 +46,7 @@
 
         <div x-data="{
             confirmOpen: false,
-            preview: null,
+            preview: @js($thumbnailPreviewUrl),
             previewModal: null,
             screenshotFiles: [],
             screenshotRemoveIndex: null,
@@ -70,7 +96,8 @@
                         @foreach (['website' => 'Website', 'design' => 'Desain', 'mobile' => 'Mobile'] as $val => $label)
                             <label class="cursor-pointer relative">
                                 <input type="radio" name="concentration" value="{{ $val }}"
-                                    {{ old('concentration') === $val ? 'checked' : '' }} required class="peer sr-only">
+                                    {{ old('concentration', $submission->concentration ?? '') === $val ? 'checked' : '' }}
+                                    required class="peer sr-only">
                                 <div
                                     class="w-full text-center border-2 border-ink p-3 font-body font-bold text-sm bg-surface text-ink transition-all peer-checked:bg-primary-yellow peer-checked:shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-muted">
                                     {{ $label }}
@@ -92,7 +119,8 @@
 
                     <div class="form-group mb-6">
                         <x-label for="title" required>Judul Karya</x-label>
-                        <x-input type="text" name="title" id="title" value="{{ old('title') }}" required
+                        <x-input type="text" name="title" id="title"
+                            value="{{ old('title', $submission->title ?? '') }}" required
                             placeholder="Masukkan judul karya" class="{{ $errors->has('title') ? 'error' : '' }}" />
                         @error('title')
                             <p class="form-helper error mt-1">{{ $message }}</p>
@@ -103,7 +131,7 @@
                         <x-label for="description" required>Deskripsi Karya</x-label>
                         <textarea name="description" id="description" rows="5" required
                             class="w-full border-2 border-ink bg-surface p-3 font-body text-ink focus:outline-none focus:ring-0 focus:shadow-[4px_4px_0px_0px_var(--color-ink)] transition-shadow {{ $errors->has('description') ? 'border-primary-red' : '' }}"
-                            placeholder="Jelaskan karya kamu: apa yang dibuat, teknologi yang dipakai, dsb...">{{ old('description') }}</textarea>
+                            placeholder="Jelaskan karya kamu: apa yang dibuat, teknologi yang dipakai, dsb...">{{ old('description', $submission->description ?? '') }}</textarea>
                         <p class="form-helper mt-1 text-ink/60">Maksimal 5000 karakter</p>
                         @error('description')
                             <p class="form-helper error mt-1">{{ $message }}</p>
@@ -111,11 +139,22 @@
                     </div>
 
                     <div class="form-group mb-6">
-                        <x-label for="thumbnail" required>Thumbnail Karya <span class="font-normal text-xs text-ink/60">(max
-                                2MB)</span></x-label>
+                        @if ($isResubmission)
+                            <x-label for="thumbnail">Thumbnail Karya <span class="font-normal text-xs text-ink/60">(opsional
+                                    saat edit, max 2MB)</span></x-label>
+                        @else
+                            <x-label for="thumbnail" required>Thumbnail Karya <span
+                                    class="font-normal text-xs text-ink/60">(max
+                                    2MB)</span></x-label>
+                        @endif
                         <input type="file" name="thumbnail" id="thumbnail" accept="image/jpeg,image/png,image/webp"
-                            required @change="preview = URL.createObjectURL($event.target.files[0])"
+                            {{ $isResubmission ? '' : 'required' }}
+                            @change="preview = URL.createObjectURL($event.target.files[0])"
                             class="w-full border-2 border-ink p-1 bg-surface text-sm {{ $errors->has('thumbnail') ? 'border-primary-red' : '' }} file:bg-ink file:text-surface file:border-2 file:border-ink file:px-4 file:py-2 file:mr-4 file:font-bold file:cursor-pointer hover:file:bg-ink/80 focus:outline-none focus:shadow-[4px_4px_0px_0px_var(--color-ink)] transition-shadow">
+                        @if ($isResubmission)
+                            <p class="form-helper mt-1 text-ink/60">Kosongkan input jika tidak ingin mengganti thumbnail.
+                            </p>
+                        @endif
                         <img x-show="preview" :src="preview"
                             class="mt-4 max-h-48 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] object-cover bg-canvas"
                             x-cloak alt="Preview thumbnail karya">
@@ -130,6 +169,28 @@
                         <input type="file" name="screenshots[]" id="screenshots" accept="image/jpeg,image/png,image/webp"
                             multiple x-ref="screenshotInput" @change="handleScreenshots"
                             class="w-full border-2 border-ink p-1 bg-surface text-sm {{ $errors->has('screenshots') || $errors->has('screenshots.*') ? 'border-primary-red' : '' }} file:bg-canvas file:text-ink file:border-2 file:border-ink file:px-4 file:py-1 file:mr-4 file:font-bold file:cursor-pointer hover:file:bg-muted focus:outline-none focus:shadow-[4px_4px_0px_0px_var(--color-ink)] transition-shadow">
+
+                        @if ($isResubmission && $submission->screenshots->isNotEmpty())
+                            <p class="form-helper mt-2 text-ink/70">Screenshot saat ini. Jika Anda upload screenshot baru,
+                                seluruh screenshot lama akan diganti.</p>
+                            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+                                @foreach ($submission->screenshots as $existingScreenshot)
+                                    @php
+                                        $existingScreenshotUrl = \Illuminate\Support\Str::startsWith(
+                                            $existingScreenshot->image_path,
+                                            'images/',
+                                        )
+                                            ? asset($existingScreenshot->image_path)
+                                            : \Illuminate\Support\Facades\Storage::url($existingScreenshot->image_path);
+                                    @endphp
+                                    <div
+                                        class="border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] aspect-[4/3] bg-canvas overflow-hidden">
+                                        <img src="{{ $existingScreenshotUrl }}" class="object-cover w-full h-full"
+                                            alt="Screenshot lama karya {{ $submission->title }}">
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
 
                         <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4" x-show="screenshotFiles.length > 0" x-cloak>
                             <template x-for="(fileObj, index) in screenshotFiles" :key="index">
@@ -157,8 +218,9 @@
                         <div class="form-group">
                             <x-label for="demo_url">Link Demo/Live <span
                                     class="font-normal text-xs text-ink/60">(opsional)</span></x-label>
-                            <x-input type="url" name="demo_url" id="demo_url" value="{{ old('demo_url') }}"
-                                placeholder="https://..." class="{{ $errors->has('demo_url') ? 'error' : '' }}" />
+                            <x-input type="url" name="demo_url" id="demo_url"
+                                value="{{ old('demo_url', $submission->demo_url ?? '') }}" placeholder="https://..."
+                                class="{{ $errors->has('demo_url') ? 'error' : '' }}" />
                             @error('demo_url')
                                 <p class="form-helper error mt-1">{{ $message }}</p>
                             @enderror
@@ -166,7 +228,8 @@
                         <div class="form-group">
                             <x-label for="github_url">Link Repository <span
                                     class="font-normal text-xs text-ink/60">(opsional)</span></x-label>
-                            <x-input type="url" name="github_url" id="github_url" value="{{ old('github_url') }}"
+                            <x-input type="url" name="github_url" id="github_url"
+                                value="{{ old('github_url', $submission->github_url ?? '') }}"
                                 placeholder="https://github.com/..."
                                 class="{{ $errors->has('github_url') ? 'error' : '' }}" />
                             @error('github_url')
@@ -178,7 +241,7 @@
 
                 <div class="mt-8">
                     <x-button type="submit" variant="primary" class="w-full justify-center py-4 text-lg">
-                        Submit Final Karya
+                        {{ $isResubmission ? 'Update & Kirim Ulang Karya' : 'Submit Final Karya' }}
                     </x-button>
                 </div>
                 {{-- Main Form Content Ended --}}
@@ -238,17 +301,25 @@
                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
                         </svg>
                     </div>
-                    <h3 class="font-display font-black text-2xl mb-3 text-ink uppercase leading-tight">Konfirmasi Submit
-                        Karya</h3>
-                    <p class="font-body text-ink/80 mb-8 leading-relaxed">Apakah Anda yakin data dan karya yang diunggah
-                        sudah final? Data tidak dapat diubah kembali setelah disubmit.</p>
+                    <h3 class="font-display font-black text-2xl mb-3 text-ink uppercase leading-tight">
+                        {{ $isResubmission ? 'Konfirmasi Kirim Ulang Karya' : 'Konfirmasi Submit Karya' }}
+                    </h3>
+                    <p class="font-body text-ink/80 mb-8 leading-relaxed">
+                        @if ($isResubmission)
+                            Apakah Anda yakin revisi karya sudah sesuai? Karya akan dikirim ulang dan masuk antrean review
+                            admin.
+                        @else
+                            Apakah Anda yakin data dan karya yang diunggah sudah final? Data tidak dapat diubah kembali
+                            setelah disubmit.
+                        @endif
+                    </p>
 
                     <div class="flex flex-col-reverse sm:flex-row justify-end gap-3">
                         <x-button type="button" variant="outline" @click="confirmOpen = false" class="justify-center">
                             Periksa Kembali
                         </x-button>
                         <x-button type="button" variant="primary" @click="submitForm" class="justify-center">
-                            Ya, Kirim Final
+                            {{ $isResubmission ? 'Ya, Kirim Ulang' : 'Ya, Kirim Final' }}
                         </x-button>
                     </div>
                 </div>
