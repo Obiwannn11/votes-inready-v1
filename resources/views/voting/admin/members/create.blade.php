@@ -37,8 +37,8 @@
         </div>
 
         <div class="flex gap-3">
-            <button type="submit" class="bg-primary-yellow text-black px-4 py-2 text-sm shadow-sm border border-gray-100 p-6  font-bold hover:bg-yellow-500 hover:scale-103 transition-transform duration-200">Simpan</button>
-            <a href="{{ route('voting.admin.members.index') }}" class="bg-white border-2 text-black px-4 py-2 text-sm shadow-sm border border-gray-100 p-6 hover: hover:bg-white-500 scale-103 transition-transform duration-200">Batal</a>
+            <button type="submit" class="bg-primary-yellow text-black px-6 py-2 text-sm font-bold shadow-sm border border-black hover:bg-yellow-500 hover:scale-105 transition-all duration-200">Simpan</button>
+            <a href="{{ route('voting.admin.members.index') }}" class="bg-white text-black px-6 py-2 text-sm font-bold shadow-sm border-2 border-black hover:bg-gray-100 hover:scale-105 transition-all duration-200 text-center">Batal</a>
         </div>
     </form>
 @endsection
