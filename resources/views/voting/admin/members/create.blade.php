@@ -9,7 +9,7 @@
 
 @section('content')
     <form method="POST" action="{{ route('voting.admin.members.store') }}"
-        class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 max-w-lg">
+        class="bg-white shadow-sm border border-gray-100 p-6">
         @csrf
 
         <div class="mb-4">
@@ -37,8 +37,8 @@
         </div>
 
         <div class="flex gap-3">
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Simpan</button>
-            <a href="{{ route('voting.admin.members.index') }}" class="px-6 py-2 border rounded hover:bg-gray-50">Batal</a>
+            <button type="submit" class="bg-primary-yellow text-black px-6 py-2 text-sm font-bold shadow-sm border border-black hover:bg-yellow-500 hover:scale-105 transition-all duration-200">Simpan</button>
+            <a href="{{ route('voting.admin.members.index') }}" class="bg-white text-black px-6 py-2 text-sm font-bold shadow-sm border-2 border-black hover:bg-gray-100 hover:scale-105 transition-all duration-200 text-center">Batal</a>
         </div>
     </form>
 @endsection
