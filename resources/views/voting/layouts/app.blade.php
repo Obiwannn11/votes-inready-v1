@@ -23,6 +23,46 @@
             max-width: 100%;
             height: auto;
         }
+
+        /* Scrollbar — defined here to bypass Lightning CSS stripping :: prefix */
+        ::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+            background: #F5F5F0;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F5F5F0;
+        }
+
+        ::-webkit-scrollbar-track:horizontal {
+            background: #F5F5F0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #121212;
+            border: none;
+            border-radius: 0;
+            min-height: 40px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #2a2a2a;
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background-color: #000000;
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: #F5F5F0;
+        }
+
+        ::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
     </style>
     @stack('styles')
 </head>

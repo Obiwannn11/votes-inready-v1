@@ -6,7 +6,7 @@
     {{-- Section 1: Hero --}}
     <div class="text-center py-16 md:py-24 border-b-4 border-ink mb-12">
         <h1 class="font-display font-black text-4xl md:text-5xl uppercase tracking-tight mb-4">
-            Inready <span class="bg-primary-yellow px-2 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)]">VOTES</span>
+            Inreadyyy <span class="bg-primary-yellow px-2 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)]">VOTES</span>
         </h1>
         <p class="font-body text-ink font-semibold text-lg md:text-xl mb-4 uppercase tracking-widest">
             Voting On Talent Excellence & Showcase
