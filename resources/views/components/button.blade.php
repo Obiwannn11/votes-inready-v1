@@ -7,7 +7,7 @@
 
 @php
     $baseClasses =
-        'inline-flex items-center justify-center font-display font-bold uppercase tracking-widest transition-all duration-200 ease-out border-2 border-ink active:translate-x-[2px] active:translate-y-[2px] active:shadow-none focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+        'inline-flex items-center justify-center font-display font-bold uppercase tracking-widest transition-all duration-200 ease-out border-2 border-ink cursor-pointer active:translate-x-[2px] active:translate-y-[2px] active:shadow-none focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
     $variants = [
         'primary' =>

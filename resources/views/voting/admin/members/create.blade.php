@@ -1,9 +1,13 @@
 @extends('voting.layouts.admin')
 @section('title', 'Tambah Member')
+@section('admin_nav_title', 'Tambah Member')
+@section('admin_nav_breadcrumb')
+    <a href="{{ route('voting.admin.members.index') }}" class="hover:text-ink transition-colors">Members</a>
+    <span class="text-ink/40">&gt;</span>
+    <span class="text-ink font-medium">Tambah Member</span>
+@endsection
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-6">Tambah Member</h1>
-
     <form method="POST" action="{{ route('voting.admin.members.store') }}"
         class="bg-white shadow-sm border border-gray-100 p-6">
         @csrf
