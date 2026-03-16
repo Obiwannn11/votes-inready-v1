@@ -13,7 +13,7 @@
             class="bg-primary-yellow text-black px-6 py-2 text-sm font-bold shadow-sm border border-black hover:bg-yellow-500 hover:scale-105 transition-all duration-200">+ Tambah Member</a>
     </div>
 
-    <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden">
+    <div class="bg-white shadow-md border border-gray-200 overflow-hidden">
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 border-b border-gray-200">
                 <tr>
