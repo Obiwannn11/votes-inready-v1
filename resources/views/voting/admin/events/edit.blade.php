@@ -1,12 +1,15 @@
 @extends('voting.layouts.admin')
 @section('title', 'Edit: ' . $event->title)
+@section('admin_nav_title', 'Edit Event')
+@section('admin_nav_breadcrumb')
+    <a href="{{ route('voting.admin.events.index') }}" class="hover:text-ink transition-colors">Events</a>
+    <span class="text-ink/40">&gt;</span>
+    <a href="{{ route('voting.admin.events.show', $event) }}" class="hover:text-ink transition-colors">{{ $event->title }}</a>
+    <span class="text-ink/40">&gt;</span>
+    <span class="text-ink font-medium">Edit</span>
+@endsection
 
 @section('content')
-    <div class="mb-8">
-        <h1 class="section-title mb-2">Edit Event</h1>
-        <p class="section-subtitle">{{ $event->title }}</p>
-    </div>
-
     <form method="POST" action="{{ route('voting.admin.events.update', $event) }}"
         class="card bg-surface p-6 shadow-[6px_6px_0px_0px_var(--color-ink)] max-w-2xl border-2 border-ink">
         @csrf
@@ -17,8 +20,7 @@
         <div class="form-group mb-6">
             <x-label for="title" required>Judul Event</x-label>
             <x-input type="text" name="title" id="title" value="{{ old('title', $event->title) }}" required
-                placeholder="Masukkan judul event" :error="$errors->has('title')"
-                class="{{ $errors->has('title') ? 'error' : '' }}" />
+                placeholder="Masukkan judul event" :error="$errors->has('title')" class="{{ $errors->has('title') ? 'error' : '' }}" />
             @error('title')
                 <p class="form-helper error mt-1">{{ $message }}</p>
             @enderror

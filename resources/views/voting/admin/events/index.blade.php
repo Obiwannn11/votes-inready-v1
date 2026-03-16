@@ -1,12 +1,14 @@
 @extends('voting.layouts.admin')
 @section('title', 'Events')
+@section('admin_nav_title', 'Voting Events')
+@section('admin_nav_breadcrumb')
+    <a href="{{ route('voting.admin.events.index') }}" class="hover:text-ink transition-colors">Events</a>
+    <span class="text-ink/40">&gt;</span>
+    <span class="text-ink font-medium">Semua Event</span>
+@endsection
 
 @section('content')
-    <div class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="section-title mb-1">Voting Events</h1>
-            <p class="section-subtitle">Kelola semua event voting</p>
-        </div>
+    <div class="flex justify-end items-center mb-8">
         <x-button variant="primary" href="{{ route('voting.admin.events.create') }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
@@ -45,7 +47,8 @@
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
             </div>
-            <p class="font-display font-bold uppercase text-ink/40 text-sm tracking-wide">Belum ada event. Buat event pertama.</p>
+            <p class="font-display font-bold uppercase text-ink/40 text-sm tracking-wide">Belum ada event. Buat event
+                pertama.</p>
         </div>
     @endforelse
 @endsection
