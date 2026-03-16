@@ -86,9 +86,9 @@ class VotingSeeder extends Seeder
                 [
                     'voting_event_id' => $submissionEvent->id,
                     'submitter_id' => $member->id,
-                    'title' => "Draft {$concentration} oleh {$member->name}",
                 ],
                 [
+                    'title' => "Draft {$concentration} oleh {$member->name}",
                     'concentration' => $concentration,
                     'description' => "Submission awal {$concentration} oleh {$member->name} untuk proses review admin.",
                     'demo_url' => 'https://example.com/demo',
@@ -116,9 +116,9 @@ class VotingSeeder extends Seeder
                     [
                         'voting_event_id' => $votingEvent->id,
                         'submitter_id' => $member->id,
-                        'title' => "Karya Final {$concentration} {$member->name}",
                     ],
                     [
+                        'title' => "Karya Final {$concentration} {$member->name}",
                         'concentration' => $concentration,
                         'description' => "Karya final {$concentration} dari {$member->name} yang siap mengikuti voting.",
                         'demo_url' => 'https://example.com/final-demo',
@@ -160,9 +160,9 @@ class VotingSeeder extends Seeder
                 [
                     'voting_event_id' => $closedEvent->id,
                     'submitter_id' => $members[0]->id,
-                    'title' => 'Website Analytics Dashboard',
                 ],
                 [
+                    'title' => 'Website Analytics Dashboard',
                     'concentration' => 'website',
                     'description' => 'Dashboard analytics dengan visualisasi metrik performa tim.',
                     'demo_url' => 'https://example.com/analytics-dashboard',
@@ -176,9 +176,9 @@ class VotingSeeder extends Seeder
                 [
                     'voting_event_id' => $closedEvent->id,
                     'submitter_id' => $members[1]->id,
-                    'title' => 'Website Project Tracker',
                 ],
                 [
+                    'title' => 'Website Project Tracker',
                     'concentration' => 'website',
                     'description' => 'Aplikasi manajemen tugas proyek berbasis web.',
                     'demo_url' => 'https://example.com/project-tracker',
@@ -192,9 +192,9 @@ class VotingSeeder extends Seeder
                 [
                     'voting_event_id' => $closedEvent->id,
                     'submitter_id' => $members[2]->id,
-                    'title' => 'Design System Kit',
                 ],
                 [
+                    'title' => 'Design System Kit',
                     'concentration' => 'design',
                     'description' => 'Kit komponen UI untuk konsistensi desain lintas produk.',
                     'demo_url' => 'https://example.com/design-system',
@@ -208,9 +208,9 @@ class VotingSeeder extends Seeder
                 [
                     'voting_event_id' => $closedEvent->id,
                     'submitter_id' => $members[3]->id,
-                    'title' => 'Mobile Attendance App',
                 ],
                 [
+                    'title' => 'Mobile Attendance App',
                     'concentration' => 'mobile',
                     'description' => 'Aplikasi absensi berbasis mobile dengan validasi lokasi.',
                     'demo_url' => 'https://example.com/mobile-attendance',

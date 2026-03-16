@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('voting_event_id')->constrained()->cascadeOnDelete();
             $table->foreignId('submitter_id')->constrained('users')->cascadeOnDelete();
+            $table->unique(['voting_event_id', 'submitter_id']);
             $table->string('title');
             $table->string('concentration');
             $table->text('description');
