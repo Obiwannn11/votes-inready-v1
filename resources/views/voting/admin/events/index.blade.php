@@ -2,32 +2,50 @@
 @section('title', 'Events')
 
 @section('content')
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold">Voting Events</h1>
-        <a href="{{ route('voting.admin.events.create') }}"
-            class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
-            + Buat Event
-        </a>
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="section-title mb-1">Voting Events</h1>
+            <p class="section-subtitle">Kelola semua event voting</p>
+        </div>
+        <x-button variant="primary" href="{{ route('voting.admin.events.create') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Buat Event
+        </x-button>
     </div>
 
     @forelse($events as $event)
-        <div class="bg-white rounded-lg shadow-sm p-4 mb-3 border border-gray-100">
+        <a href="{{ route('voting.admin.events.show', $event) }}"
+            class="block card bg-surface p-5 mb-4 border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] hover:-translate-y-1 transition-all duration-200 cursor-pointer no-underline">
             <div class="flex justify-between items-start">
                 <div>
-                    <a href="{{ route('voting.admin.events.show', $event) }}"
-                        class="text-lg font-semibold hover:text-blue-600">
+                    <span class="font-display font-black text-lg uppercase tracking-tight text-ink">
                         {{ $event->title }}
-                    </a>
-                    <p class="text-sm text-gray-500 mt-1">Status: <span
-                            class="font-medium text-gray-700">{{ strtoupper($event->status) }}</span></p>
+                    </span>
+                    <div class="mt-2">
+                        <x-badge :type="$event->status" :pill="true">{{ str_replace('_', ' ', $event->status) }}</x-badge>
+                    </div>
                 </div>
-                <span class="text-xs text-gray-400">
+                <span class="font-body text-xs text-ink/50">
                     Dibuat: {{ $event->created_at->format('d M Y') }}
                 </span>
             </div>
-        </div>
+        </a>
     @empty
-        <div class="text-center text-gray-400 py-12 bg-white rounded-lg border border-dashed">Belum ada event. Buat event
-            pertama.</div>
+        <div class="card bg-surface border-2 border-dashed border-ink p-12 text-center shadow-none">
+            <div class="icon-container mx-auto mb-4 bg-muted text-ink border-2 border-ink">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+                    <rect x="3" y="4" width="18" height="18" rx="0"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+            </div>
+            <p class="font-display font-bold uppercase text-ink/40 text-sm tracking-wide">Belum ada event. Buat event pertama.</p>
+        </div>
     @endforelse
 @endsection
