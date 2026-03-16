@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Voting;
 
-use Illuminate\Contracts\Validation\ValidationRule;
+use App\Models\Submission;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,18 +16,27 @@ class SubmitKaryaRequest extends FormRequest
         return Auth::check() && Auth::user()->role === 'member';
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        $event = $this->route('event');
+        $existingSubmission = null;
+
+        if ($event && Auth::check()) {
+            $existingSubmission = Submission::query()
+                ->where('voting_event_id', $event->id)
+                ->where('submitter_id', Auth::id())
+                ->first();
+        }
+
+        $thumbnailPresenceRule = $existingSubmission && $existingSubmission->status === 'rejected'
+            ? 'nullable'
+            : 'required';
+
         return [
             'concentration'   => ['required', 'in:website,design,mobile'],
             'title'           => ['required', 'string', 'max:255'],
             'description'     => ['required', 'string', 'max:5000'],
-            'thumbnail'       => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'thumbnail'       => [$thumbnailPresenceRule, 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'screenshots'     => ['nullable', 'array', 'max:5'],
             'screenshots.*'   => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'demo_url'        => ['nullable', 'url', 'max:500'],

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Voting\Admin;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReviewSubmissionRequest extends FormRequest
@@ -19,7 +18,14 @@ class ReviewSubmissionRequest extends FormRequest
     {
         return [
             'status' => 'required|in:approved,rejected',
-            'notes' => 'nullable|string', // Optional if we want to add notes feature later
+            'admin_notes' => 'required_if:status,rejected|nullable|string|max:3000',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'admin_notes.required_if' => 'Alasan reject wajib diisi.',
         ];
     }
 }
