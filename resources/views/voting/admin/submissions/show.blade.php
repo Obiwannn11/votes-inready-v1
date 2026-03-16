@@ -2,108 +2,160 @@
 @section('title', $submission->title)
 
 @section('content')
+    {{-- Back link --}}
     <a href="{{ route('voting.admin.submissions', $submission->event) }}"
-        class="text-sm text-gray-500 hover:text-blue-600 mb-4 inline-block">← Kembali ke List</a>
+        class="inline-flex items-center gap-1 font-display font-bold text-xs uppercase tracking-widest text-ink/50 hover:text-primary-blue transition-colors mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Kembali ke List
+    </a>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 max-w-3xl">
-        <div class="flex justify-between items-start mb-4">
+    <div class="card bg-surface p-6 md:p-8 max-w-3xl border-2 border-ink shadow-[6px_6px_0px_0px_var(--color-ink)]">
+        {{-- Header --}}
+        <div class="flex justify-between items-start mb-6">
             <div>
-                <h1 class="text-2xl font-bold">{{ $submission->title }}</h1>
-                <p class="text-gray-500">Oleh: {{ $submission->submitter->name ?? 'Unknown' }}</p>
+                <h1 class="section-title mb-2">{{ $submission->title }}</h1>
+                <p class="font-body text-sm text-ink/60">
+                    Oleh: <strong class="text-ink">{{ $submission->submitter->name ?? 'Unknown' }}</strong>
+                </p>
             </div>
-            <span
-                class="px-3 py-1 rounded text-sm {{ $submission->status === 'approved' ? 'bg-green-100 text-green-700' : ($submission->status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700') }}">
-                {{ strtoupper($submission->status) }}
-            </span>
+            <x-badge :type="$submission->status" :pill="true">{{ $submission->status }}</x-badge>
         </div>
 
+        {{-- Thumbnail --}}
         @if ($submission->thumbnail_path)
             @php
                 $thumbnailUrl = \Illuminate\Support\Str::startsWith($submission->thumbnail_path, 'images/')
                     ? asset($submission->thumbnail_path)
                     : \Illuminate\Support\Facades\Storage::url($submission->thumbnail_path);
             @endphp
-            <img src="{{ $thumbnailUrl }}" class="w-full h-64 object-cover rounded mb-6 bg-gray-100"
+            <img src="{{ $thumbnailUrl }}"
+                class="w-full h-64 object-cover border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] mb-6 bg-canvas"
                 alt="Thumbnail karya {{ $submission->title }}" loading="lazy">
         @endif
 
+        {{-- Description --}}
         <div class="mb-6">
-            <h3 class="font-bold text-lg mb-2">Deskripsi</h3>
-            <p class="text-gray-700 whitespace-pre-wrap">{{ $submission->description }}</p>
+            <h3 class="font-display font-black text-lg mb-3 pl-3 border-l-4 border-primary-blue uppercase">Deskripsi</h3>
+            <p class="font-body text-sm text-ink/80 whitespace-pre-wrap leading-relaxed">{{ $submission->description }}</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            @if ($submission->demo_url)
-                <a href="{{ $submission->demo_url }}" target="_blank" rel="noopener noreferrer"
-                    class="block p-4 border rounded text-center hover:bg-gray-50">
-                    <span class="block font-bold text-blue-600">Demo URL</span>
-                    <span class="text-sm text-gray-500 truncate">{{ $submission->demo_url }}</span>
-                </a>
-            @endif
+        {{-- Links --}}
+        @if ($submission->demo_url || $submission->github_url)
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                @if ($submission->demo_url)
+                    <a href="{{ $submission->demo_url }}" target="_blank" rel="noopener noreferrer"
+                        class="block p-4 border-2 border-ink bg-surface text-center hover:bg-muted transition-colors shadow-[4px_4px_0px_0px_var(--color-ink)] hover:-translate-y-1 transition-transform duration-200">
+                        <span class="block font-display font-bold uppercase text-sm text-primary-blue tracking-wide">Demo URL</span>
+                        <span class="font-body text-xs text-ink/50 truncate block mt-1">{{ $submission->demo_url }}</span>
+                    </a>
+                @endif
+                @if ($submission->github_url)
+                    <a href="{{ $submission->github_url }}" target="_blank" rel="noopener noreferrer"
+                        class="block p-4 border-2 border-ink bg-surface text-center hover:bg-muted transition-colors shadow-[4px_4px_0px_0px_var(--color-ink)] hover:-translate-y-1 transition-transform duration-200">
+                        <span class="block font-display font-bold uppercase text-sm text-ink tracking-wide">GitHub</span>
+                        <span class="font-body text-xs text-ink/50 truncate block mt-1">{{ $submission->github_url }}</span>
+                    </a>
+                @endif
+            </div>
+        @endif
 
-            @if ($submission->github_url)
-                <a href="{{ $submission->github_url }}" target="_blank" rel="noopener noreferrer"
-                    class="block p-4 border rounded text-center hover:bg-gray-50">
-                    <span class="block font-bold text-gray-800">GitHub</span>
-                    <span class="text-sm text-gray-500 truncate">{{ $submission->github_url }}</span>
-                </a>
-            @endif
-        </div>
-
+        {{-- Screenshots --}}
         @if ($submission->screenshots->count() > 0)
             <div class="mb-8">
-                <h3 class="font-bold text-lg mb-3">Screenshots</h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <h3 class="font-display font-black text-lg mb-3 pl-3 border-l-4 border-primary-red uppercase">Screenshots</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     @foreach ($submission->screenshots as $ss)
                         @php
                             $screenshotUrl = \Illuminate\Support\Str::startsWith($ss->image_path, 'images/')
                                 ? asset($ss->image_path)
                                 : \Illuminate\Support\Facades\Storage::url($ss->image_path);
                         @endphp
-                        <img src="{{ $screenshotUrl }}" class="w-full h-32 object-cover rounded bg-gray-100"
-                            alt="Screenshot karya {{ $submission->title }}" loading="lazy">
+                        <div class="border-2 border-ink shadow-[4px_4px_0px_0px_var(--color-ink)] aspect-[4/3] bg-canvas overflow-hidden">
+                            <img src="{{ $screenshotUrl }}" class="w-full h-full object-cover"
+                                alt="Screenshot karya {{ $submission->title }}" loading="lazy">
+                        </div>
                     @endforeach
                 </div>
             </div>
         @endif
 
+        {{-- Admin Notes --}}
         @if ($submission->admin_notes)
-            <div class="mb-6 rounded border border-gray-200 bg-gray-50 p-4">
-                <h3 class="font-bold text-sm uppercase tracking-wide text-gray-700 mb-1">Catatan Admin Saat Ini</h3>
-                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $submission->admin_notes }}</p>
+            <div class="mb-6 border-2 border-ink bg-primary-yellow/10 p-4 shadow-[4px_4px_0px_0px_var(--color-ink)]">
+                <h3 class="font-display font-bold text-xs uppercase tracking-widest text-ink mb-2">Catatan Admin Saat Ini</h3>
+                <p class="font-body text-sm text-ink/80 whitespace-pre-wrap">{{ $submission->admin_notes }}</p>
             </div>
         @endif
 
-        <div class="border-t pt-6 grid gap-4 md:grid-cols-2">
+        <hr class="border-t-2 border-ink my-8">
+
+        {{-- Review Actions --}}
+        <div class="grid gap-4 md:grid-cols-2">
+            {{-- Approve --}}
             <form method="POST" action="{{ route('voting.admin.submissions.review', $submission) }}"
-                class="border rounded p-4">
+                class="border-2 border-ink p-5 bg-surface shadow-[4px_4px_0px_0px_var(--color-ink)]">
                 @csrf @method('PATCH')
                 <input type="hidden" name="status" value="approved">
 
-                <h3 class="font-semibold mb-2">Approve Submission</h3>
-                <p class="text-sm text-gray-500 mb-4">Status akan menjadi approved dan user tidak bisa mengubah karya lagi.</p>
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-8 h-8 bg-success text-surface border-2 border-ink flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="font-display font-black text-lg uppercase">Approve</h3>
+                </div>
+                <p class="font-body text-xs text-ink/60 mb-4">Status akan menjadi approved dan user tidak bisa mengubah karya lagi.</p>
 
-                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                <x-button type="submit" variant="primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
                     Approve Submission
-                </button>
+                </x-button>
             </form>
 
+            {{-- Reject --}}
             <form method="POST" action="{{ route('voting.admin.submissions.review', $submission) }}"
-                class="border rounded p-4">
+                class="border-2 border-ink p-5 bg-surface shadow-[4px_4px_0px_0px_var(--color-ink)]">
                 @csrf @method('PATCH')
                 <input type="hidden" name="status" value="rejected">
 
-                <h3 class="font-semibold mb-2">Reject Submission</h3>
-                <label for="admin_notes" class="block text-sm font-medium text-gray-700 mb-1">Alasan Reject</label>
-                <textarea id="admin_notes" name="admin_notes" rows="4" required
-                    class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-red-200">{{ old('admin_notes', $submission->admin_notes) }}</textarea>
-                @error('admin_notes')
-                    <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                @enderror
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-8 h-8 bg-primary-red text-surface border-2 border-ink flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </div>
+                    <h3 class="font-display font-black text-lg uppercase">Reject</h3>
+                </div>
 
-                <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 mt-3">
+                <div class="form-group mb-4">
+                    <x-label for="admin_notes" required>Alasan Reject</x-label>
+                    <textarea id="admin_notes" name="admin_notes" rows="4" required
+                        class="w-full border-2 border-ink bg-surface p-3 font-body text-sm text-ink focus:outline-none focus:ring-0 focus:shadow-[4px_4px_0px_0px_var(--color-ink)] transition-shadow {{ $errors->has('admin_notes') ? 'border-primary-red' : '' }}"
+                        placeholder="Jelaskan alasan penolakan...">{{ old('admin_notes', $submission->admin_notes) }}</textarea>
+                    @error('admin_notes')
+                        <p class="form-helper error mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <x-button type="submit" variant="danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
                     Reject Submission
-                </button>
+                </x-button>
             </form>
         </div>
     </div>

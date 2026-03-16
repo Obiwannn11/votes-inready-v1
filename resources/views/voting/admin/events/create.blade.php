@@ -2,35 +2,53 @@
 @section('title', 'Buat Event')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-6">Buat Event Baru</h1>
+    <div class="mb-8">
+        <h1 class="section-title mb-2">Buat Event Baru</h1>
+        <p class="section-subtitle">Isi form di bawah untuk membuat event voting baru</p>
+    </div>
 
     <form method="POST" action="{{ route('voting.admin.events.store') }}"
-        class="bg-white rounded-lg shadow-sm p-6 max-w-2xl border border-gray-100">
+        class="card bg-surface p-6 shadow-[6px_6px_0px_0px_var(--color-ink)] max-w-2xl border-2 border-ink">
         @csrf
 
-        <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Judul Event *</label>
-            <input type="text" name="title" value="{{ old('title') }}" class="w-full border p-2 rounded" required>
+        <h2 class="font-display font-black text-xl mb-6 pl-3 border-l-4 border-primary-blue uppercase">Detail Event</h2>
+
+        <div class="form-group mb-6">
+            <x-label for="title" required>Judul Event</x-label>
+            <x-input type="text" name="title" id="title" value="{{ old('title') }}" required
+                placeholder="Masukkan judul event" :error="$errors->has('title')"
+                class="{{ $errors->has('title') ? 'error' : '' }}" />
             @error('title')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="form-helper error mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Deskripsi</label>
-            <textarea name="description" class="w-full border p-2 rounded h-24">{{ old('description') }}</textarea>
+        <div class="form-group mb-6">
+            <x-label for="description">Deskripsi</x-label>
+            <textarea name="description" id="description" rows="4"
+                class="w-full border-2 border-ink bg-surface p-3 font-body text-ink focus:outline-none focus:ring-0 focus:shadow-[4px_4px_0px_0px_var(--color-ink)] transition-shadow"
+                placeholder="Deskripsi singkat tentang event...">{{ old('description') }}</textarea>
         </div>
 
-        <div class="mb-6">
-            <label class="block text-sm font-medium mb-1">Deadline Submission</label>
-            <input type="datetime-local" name="submission_deadline" value="{{ old('submission_deadline') }}"
-                class="w-full border p-2 rounded">
-            <p class="text-gray-400 text-xs mt-1">Opsional. Kosongkan jika tidak ada deadline.</p>
+        <div class="form-group mb-8">
+            <x-label for="submission_deadline">Deadline Submission</x-label>
+            <input type="datetime-local" name="submission_deadline" id="submission_deadline"
+                value="{{ old('submission_deadline') }}"
+                class="w-full border-2 border-ink bg-surface px-4 py-3 text-sm font-body transition-all duration-200 outline-none focus:shadow-[4px_4px_0px_0px_var(--color-ink)]">
+            <p class="form-helper mt-1 text-ink/60">Opsional. Kosongkan jika tidak ada deadline.</p>
         </div>
+
+        <hr class="border-t-2 border-ink my-8">
 
         <div class="flex gap-3">
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Simpan</button>
-            <a href="{{ route('voting.admin.events.index') }}" class="px-6 py-2 border rounded hover:bg-gray-50">Batal</a>
+            <x-button type="submit" variant="primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Simpan
+            </x-button>
+            <x-button variant="outline" href="{{ route('voting.admin.events.index') }}">Batal</x-button>
         </div>
     </form>
 @endsection
