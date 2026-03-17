@@ -32,14 +32,14 @@
         class="fixed inset-y-0 left-0 z-40 w-72 bg-primary-yellow text-ink border-r-4 border-ink flex flex-col transform transition-transform duration-200 -translate-x-full md:translate-x-0"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
         <div
-            class="p-5 bg-primary-yellow border-b-4 border-ink font-display font-black tracking-wide text-2xl flex items-center justify-between text-ink">
+            class="p-6.5 bg-primary-yellow border-b-4 border-ink font-display font-black tracking-wide text-2xl flex items-center justify-between text-ink">
             <span class="uppercase">Admin Panel</span>
             <button type="button"
                 class="md:hidden px-3 py-1 border-2 border-ink bg-primary-red text-surface font-display font-bold shadow-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all uppercase"
                 @click="sidebarOpen = false">X</button>
         </div>
 
-        <nav class="flex-1 p-5 space-y-4 text-base font-display font-bold overflow-y-auto">
+        <nav class="flex-1 p-9 space-y-4 text-base font-display font-bold overflow-y-auto">
             <a href="{{ route('voting.admin.events.index') }}" @click="sidebarOpen = false"
                 class="block w-full text-left px-4 py-3 border-2 border-ink text-ink shadow-md transition-all duration-200 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 active:shadow-none {{ \Illuminate\Support\Facades\Request::is('vote/admin/events*') ? 'bg-black text-white shadow-none' : 'bg-primary-yellow' }}">
                 EVENTS
