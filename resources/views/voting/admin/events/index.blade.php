@@ -9,7 +9,10 @@
 
 @section('content')
     <div class="flex justify-end items-center mb-8">
-        <x-button variant="primary" href="{{ route('voting.admin.events.create') }}">
+        <x-button variant="primary" 
+            href="{{ route('voting.admin.events.create') }}"
+            class="transition-all duration-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+            
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
