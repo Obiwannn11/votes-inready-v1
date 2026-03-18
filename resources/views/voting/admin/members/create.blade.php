@@ -9,47 +9,49 @@
 
 @section('content')
     <form method="POST" action="{{ route('voting.admin.members.store') }}"
-        class="bg-white shadow-lg border border-gray-100 p-6">
+        class="card bg-surface p-6 shadow-[6px_6px_0px_0px_var(--color-ink)] max-w-2xl border-2 border-ink">
         @csrf
 
-        <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Nama Lengkap *</label>
-            <input type="text" name="name" value="{{ old('name') }}" class="w-full border p-2" required>
+        <h2 class="font-display font-black text-xl mb-6 pl-3 border-l-4 border-primary-blue uppercase">Detail Member</h2>
+
+        <div class="form-group mb-6">
+            <x-label for="name" required>Nama Lengkap</x-label>
+            <x-input type="text" name="name" id="name" value="{{ old('name') }}" required
+                placeholder="Masukkan nama lengkap" :error="$errors->has('name')" class="{{ $errors->has('name') ? 'error' : '' }}" />
             @error('name')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="form-helper error mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Email *</label>
-            <input type="email" name="email" value="{{ old('email') }}" class="w-full border p-2" required>
+        <div class="form-group mb-6">
+            <x-label for="email" required>Email</x-label>
+            <x-input type="email" name="email" id="email" value="{{ old('email') }}" required
+                placeholder="Masukkan alamat email" :error="$errors->has('email')" class="{{ $errors->has('email') ? 'error' : '' }}" />
             @error('email')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="form-helper error mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-6">
-            <label class="block text-sm font-medium mb-1">Password *</label>
-            <input type="password" name="password" class="w-full border p-2" required minlength="8">
+        <div class="form-group mb-8">
+            <x-label for="password" required>Password</x-label>
+            <x-input type="password" name="password" id="password" required minlength="8"
+                placeholder="Masukkan password (minimal 8 karakter)" :error="$errors->has('password')" class="{{ $errors->has('password') ? 'error' : '' }}" />
             @error('password')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="form-helper error mt-1">{{ $message }}</p>
             @enderror
         </div>
+
+        {{-- <hr class="border-t-2 border-ink my-8"> --}}
 
         <div class="flex gap-3">
-            <button type="submit" 
-                class="bg-primary-yellow text-black px-6 py-2 text-sm font-bold border border-black transition-all duration-100 
-                    shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
-                    hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+            <x-button type="submit" variant="primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Simpan
-            </button>
-
-            <a href="{{ route('voting.admin.members.index') }}" 
-                class="bg-white text-black px-6 py-2 text-sm font-bold border-2 border-black transition-all duration-100 text-center
-                    shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
-                    hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
-                Batal
-            </a>
+            </x-button>
+            <x-button variant="outline" href="{{ route('voting.admin.members.index') }}">Batal</x-button>
         </div>
     </form>
 @endsection
