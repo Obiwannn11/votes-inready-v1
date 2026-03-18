@@ -321,6 +321,13 @@
     }
     .btn-danger:hover { background: var(--red-dark); }
 
+    .btn-success {
+      background: var(--success);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+    .btn-success:hover { background: #15803d; }
+
     .btn-info {
       background: var(--blue);
       color: white;
@@ -548,6 +555,8 @@
     .badge-website { background: var(--blue); color: white; }
     .badge-desain { background: var(--red); color: white; }
     .badge-mobile { background: var(--yellow); color: var(--ink); }
+    .badge-success { background: var(--success); color: white; }
+    .badge-danger { background: var(--red); color: white; }
 
     /* ── SHADOWS DEMO ── */
     .shadow-demo {
@@ -1405,6 +1414,7 @@
           <button class="btn btn-primary">Primary</button>
           <button class="btn btn-secondary">Secondary</button>
           <button class="btn btn-danger">Danger</button>
+          <button class="btn btn-success">Success</button>
           <button class="btn btn-info">Info</button>
           <button class="btn btn-outline">Outline</button>
           <button class="btn btn-ghost">Ghost</button>
@@ -1628,11 +1638,13 @@
 
       <div class="grid-3" style="margin-top: 24px;">
         <div class="subsection">
-          <div class="subsection-title">Badges / Konsentrasi</div>
+          <div class="subsection-title">Badges / Tags</div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <span class="badge badge-website" style="align-self: flex-start;">Website</span>
             <span class="badge badge-desain" style="align-self: flex-start;">Desain</span>
             <span class="badge badge-mobile" style="align-self: flex-start;">Mobile</span>
+            <span class="badge badge-success" style="align-self: flex-start; box-shadow: 2px 2px 0px 0px var(--ink);">Success</span>
+            <span class="badge badge-danger" style="align-self: flex-start; box-shadow: 2px 2px 0px 0px var(--ink);">Danger</span>
           </div>
         </div>
 
