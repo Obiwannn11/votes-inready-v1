@@ -14,6 +14,7 @@
             'bg-primary-yellow text-ink shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-primary-yellow-dark',
         'secondary' => 'bg-ink text-surface shadow-[4px_4px_0px_0px_var(--color-primary-yellow)] hover:bg-gray-800',
         'danger' => 'bg-primary-red text-surface shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-primary-red-dark',
+        'success' => 'bg-success text-surface shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-green-700',
         'info' => 'bg-primary-blue text-surface shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-primary-blue-dark',
         'outline' => 'bg-transparent text-ink shadow-[4px_4px_0px_0px_var(--color-ink)] hover:bg-canvas',
         'ghost' =>

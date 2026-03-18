@@ -23,6 +23,9 @@
         'pending' => 'bg-primary-yellow text-ink',
         'approved' => 'bg-success text-surface',
         'rejected' => 'bg-primary-red text-surface',
+        // General status
+        'success' => 'bg-success text-surface',
+        'danger' => 'bg-primary-red text-surface',
     ];
 
     $classes = $baseClasses . ' ' . ($types[$type] ?? $types['default']);
